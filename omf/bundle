@@ -1,0 +1,11 @@
+package ansible
+package aws
+package brew
+package composer
+package foreign-env
+package kill-on-port
+package thefuck
+theme agnoster
+theme bobthefish
+theme clearance
+theme default
