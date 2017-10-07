@@ -10,12 +10,6 @@
 [submodule "tmux/plugins/tpm"]
 	path = tmux/plugins/tpm
 	url = git@github.com:tmux-plugins/tpm.git
-[submodule "tmux/plugins/vim-tmux-navigator"]
-	path = tmux/plugins/vim-tmux-navigator
-	url = git@github.com:christoomey/vim-tmux-navigator.git
-[submodule "vim/bundle/YouCompleteMe"]
-	path = vim/bundle/YouCompleteMe
-	url = git@github.com:Valloric/YouCompleteMe.git
 [submodule "vim/bundle/ack"]
 	path = vim/bundle/ack
 	url = git@github.com:mileszs/ack.vim.git
@@ -88,9 +82,6 @@
 [submodule "tmux/tmux-powerline"]
 	path = tmux/tmux-powerline
 	url = git@github.com:erikw/tmux-powerline.git
-[submodule "tmux/plugins/vim-unimpared"]
-	path = tmux/plugins/vim-unimpared
-	url = git@github.com:tpope/vim-unimpaired.git
 [submodule "vim/bundle/vim-markdown"]
 	path = vim/bundle/vim-markdown
 	url = git@github.com:plasticboy/vim-markdown.git
@@ -103,3 +94,18 @@
 [submodule "editorconfig"]
 	path = editorconfig
 	url = https://github.com/editorconfig/editorconfig-vim.git
+[submodule "vim/bundle/deoplete.nvim"]
+	path = vim/bundle/deoplete.nvim
+	url = git@github.com:Shougo/deoplete.nvim.git
+[submodule "vim/bundle/deoplete-ternjs"]
+	path = vim/bundle/deoplete-ternjs
+	url = git@github.com:carlitux/deoplete-ternjs.git
+[submodule "vim/bundle/nvim-typescript"]
+	path = vim/bundle/nvim-typescript
+	url = git@github.com:mhartington/nvim-typescript.git
+[submodule "vim/bundle/phpcd.vim"]
+	path = vim/bundle/phpcd.vim
+	url = git@github.com:lvht/phpcd.vim.git
+[submodule "vim/plugins/vim-unimpared"]
+	path = vim/plugins/vim-unimpared
+	url = git@github.com:tpope/vim-unimpaired.git

@@ -6,6 +6,8 @@ end
 
 set fish_key_bindings fish_vi_key_bindings
 set fish_bind_mode insert
-export EDITOR=vim
+export EDITOR=nvim
 
 alias mux=tmuxinator
+alias vim=nvim
+alias vi=nvim
