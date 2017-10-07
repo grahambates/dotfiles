@@ -91,3 +91,15 @@
 [submodule "tmux/plugins/vim-unimpared"]
 	path = tmux/plugins/vim-unimpared
 	url = git@github.com:tpope/vim-unimpaired.git
+[submodule "vim/bundle/vim-markdown"]
+	path = vim/bundle/vim-markdown
+	url = git@github.com:plasticboy/vim-markdown.git
+[submodule "vim/bundle/tabular"]
+	path = vim/bundle/tabular
+	url = git@github.com:godlygeek/tabular.git
+[submodule "vim/bundle/neoformat"]
+	path = vim/bundle/neoformat
+	url = git@github.com:sbdchd/neoformat.git
+[submodule "editorconfig"]
+	path = editorconfig
+	url = https://github.com/editorconfig/editorconfig-vim.git

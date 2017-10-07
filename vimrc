@@ -14,6 +14,11 @@
   " Keyboard mash to escape
   imap jk <Esc> 
   imap kj <Esc>
+  set scrolloff=10
+
+  " Disable seldom used commands
+  nnoremap Q <nop>
+  " nnoremap K <nop>
 
 " System
   set mouse=a " Enable mouse
@@ -21,10 +26,13 @@
   if !has('nvim')
     set ttymouse=xterm2 
   endif
+  " Disable tmp files
+  set nobackup
+  set noswapfile
   " Centralise temporary files
-  set backupdir=~/.vim/backup//
-  set directory=~/.vim/swap//
-  set undodir=~/.vim/undo//
+  " set backupdir=~/.vim/backup//
+  " set directory=~/.vim/swap//
+  " set undodir=~/.vim/undo//
 
 " Tabs
   set expandtab
@@ -48,6 +56,7 @@
   set confirm " Ask about unsaved changes
   nnoremap <Leader>w :w <enter>
   nnoremap <Leader>q :bd <enter>
+  nnoremap <Leader>Q :qall <enter>
 
 " Splits
   set splitbelow " Default split directions
@@ -78,6 +87,25 @@
   else
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+  endif
+
+" Spelling
+  if has("spell")
+    set spelllang=en_gb
+    nnoremap <leader>s :set spell!<CR>
+  endif
+
+" Fix common command typos
+  if has("user_commands")
+    command! -bang -nargs=? -complete=file E e<bang> <args>
+    command! -bang -nargs=? -complete=file W w<bang> <args>
+    command! -bang -nargs=? -complete=file Wq wq<bang> <args>
+    command! -bang -nargs=? -complete=file WQ wq<bang> <args>
+    command! -bang Wa wa<bang>
+    command! -bang WA wa<bang>
+    command! -bang Q q<bang>
+    command! -bang QA qa<bang>
+    command! -bang Qa qa<bang>
   endif
 
 " Plugins {{{
@@ -126,7 +154,16 @@
     " open a NERDTree automatically when vim starts up if no files were specified
     autocmd StdinReadPre * let s:std_in=1
     autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-    " close vim if the only window left open is a NERDTree
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+  " Dash
+    nmap <silent> <leader>d <Plug>DashSearch
+
+  " Markdown
+    let g:vim_markdown_folding_disabled = 1 
+
+  " Neoformat
+    augroup fmt
+      autocmd!
+      autocmd BufWritePre * undojoin | Neoformat
+    augroup END
 " }}}
