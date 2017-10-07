@@ -1,4 +1,5 @@
 " Setup
+  set rtp+=/usr/local/opt/fzf
   " Don't need vim-sensible for neovim
   if has('nvim')
     let g:pathogen_disabled = ['vim-sensible']
@@ -109,17 +110,6 @@
   endif
 
 " Plugins {{{
-
-  " Syntastic
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_check_on_open = 0
-    let g:syntastic_check_on_wq = 0
-    let g:syntastic_javascript_checkers = ['eslint']
-
   " Javascript
     let g:javascript_plugin_jsdoc = 1 " Enable sytax highlighting for docblocks
 
@@ -166,4 +156,10 @@
       autocmd!
       autocmd BufWritePre * undojoin | Neoformat
     augroup END
+
+  " DeoComplete
+    if has('nvim')
+      call deoplete#enable()
+      set completeopt+=noinsert
+    end
 " }}}
