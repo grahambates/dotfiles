@@ -1,21 +1,71 @@
-" Setup
-  set rtp+=/usr/local/opt/fzf
-  " Don't need vim-sensible for neovim
-  if has('nvim')
-    let g:pathogen_disabled = ['vim-sensible']
-  endif
-  execute pathogen#infect()
+call plug#begin('~/.vim/plugged')
+" Make vim's defaults match nvim
+	if !has('nvim')
+		Plug 'tpope/vim-sensible'
+	endif
+
+" Navigation
+	Plug 'christoomey/vim-tmux-navigator'
+	Plug 'easymotion/vim-easymotion'
+	Plug 'tpope/vim-unimpaired'
+	Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" Editing
+	Plug 'godlygeek/tabular'
+	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-commentary'
+	Plug 'tpope/vim-repeat'
+	Plug 'tommcdo/vim-lion'
+	Plug 'editorconfig/editorconfig-vim'
+
+" Appearance
+	Plug 'itchyny/lightline.vim'
+	Plug 'tomasr/molokai'
+
+" Search
+	Plug 'mileszs/ack.vim'
+	Plug 'nelstrom/vim-visual-star-search'
+	Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+
+" Formatting
+	Plug 'w0rp/ale'
+	Plug 'sbdchd/neoformat'
+
+" Utility
+	Plug 'tpope/vim-fugitive'
+
+" Languages
+	" Javascript
+	Plug 'mxw/vim-jsx' " Need to load on startup to enable filetypes
+	Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+	Plug 'alampros/vim-styled-jsx', { 'for': 'javascript' }
+	Plug 'Galooshi/vim-import-js', { 'for': 'javascript' }
+	Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+	Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+	" PHP
+	Plug 'StanAngeloff/php.vim', { 'for': 'php' }
+	Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+	Plug 'arnaud-lb/vim-php-namespace', { 'for': 'php' }
+	" Markdown
+	Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+
+" Completion
+	Plug 'junegunn/fzf.vim'
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+
+call plug#end()
 
 " General
-  colorscheme molokai
   let mapleader = ',' " Set leader to ','
-  noremap \ , 
+  noremap \ ,
   set shortmess+=filmnrxcoOtT " Abbrev. of messages (avoids 'hit enter')
   set wildmode=longest,list,full " Better command completion
   " Keyboard mash to escape
-  imap jk <Esc> 
+  imap jk <Esc>
   imap kj <Esc>
   set scrolloff=10
+	colorscheme molokai
 
   " Disable seldom used commands
   nnoremap Q <nop>
@@ -25,15 +75,11 @@
   set mouse=a " Enable mouse
   " Fix mouse select in iTerm - not needed in neovim
   if !has('nvim')
-    set ttymouse=xterm2 
+    set ttymouse=xterm2
   endif
   " Disable tmp files
   set nobackup
   set noswapfile
-  " Centralise temporary files
-  " set backupdir=~/.vim/backup//
-  " set directory=~/.vim/swap//
-  " set undodir=~/.vim/undo//
 
 " Tabs
   set expandtab
@@ -109,57 +155,59 @@
     command! -bang Qa qa<bang>
   endif
 
-" Plugins {{{
-  " Javascript
-    let g:javascript_plugin_jsdoc = 1 " Enable sytax highlighting for docblocks
+" Folding
+  set foldmethod=syntax
+  set foldlevel=99
 
-  " JSX
-    let g:jsx_ext_required = 0
+" Plugins {{{
+"
+  " Nerdtree
+		nnoremap <Leader>e :NERDTreeToggle <enter>
+		let g:NERDTreeShowHidden=1
+		let g:NERDTreeIgnore=['\.git$', '\.npm$']
 
   " Ack
-    let g:ackprg = 'ag --vimgrep'
+		let g:ackprg = 'ag --vimgrep'
 
-  " CtrlP
-    let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+  " FZF
+		nmap <leader>fb :Buffers<CR>
+		nmap <leader>ff :Files<CR>
+		nmap <leader>fm :Marks<CR>
+		nmap <leader>fw :Windows<CR>
+		nmap <leader>fg :GFiles<CR>
 
-  " PHP Namespace
-    function! IPhpInsertUse()
-      call PhpInsertUse()
-      call feedkeys('a',  'n')
-    endfunction
-    autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-    autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
+	" Deoplete
+		call deoplete#enable()
+		set completeopt+=noinsert
+		let g:deoplete#sources#ternjs#filetypes = ['javascript', 'jsx', 'javascript.jsx', 'vue']
+
+	" Neoformat
+		augroup fmt
+			autocmd!
+			autocmd BufWritePre * undojoin | Neoformat
+		augroup END
 
   " Fugitive
-    nnoremap <leader>gs :Gstatus<CR>
-    nnoremap <leader>gc :Gcommit<CR>
-    nnoremap <leader>gd :Gdiff<CR>
-    nnoremap <leader>gb :Gblame<CR>
-    nnoremap <leader>gf :Gfetch<CR>
+		nnoremap <leader>gs :Gstatus<CR>
+		nnoremap <leader>gc :Gcommit<CR>
+		nnoremap <leader>gd :Gdiff<CR>
+		nnoremap <leader>gb :Gblame<CR>
+		nnoremap <leader>gf :Gfetch<CR>
 
-  " NERDTree
-    nnoremap <Leader>e :NERDTreeToggle <enter>
-    let g:NERDTreeShowHidden=1
-    let g:NERDTreeIgnore=['\.git$', '\.npm$']
-    " open a NERDTree automatically when vim starts up if no files were specified
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+	" Javascript
+		let g:javascript_plugin_jsdoc = 1 " Enable sytax highlighting for docblocks
 
-  " Dash
-    nmap <silent> <leader>d <Plug>DashSearch
+	" JSX
+		let g:jsx_ext_required = 0
 
-  " Markdown
-    let g:vim_markdown_folding_disabled = 1 
+	" PHP namespace
+		function! IPhpInsertUse()
+			call PhpInsertUse()
+			call feedkeys('a',  'n')
+		endfunction
+		autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
+		autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
 
-  " Neoformat
-    augroup fmt
-      autocmd!
-      autocmd BufWritePre * undojoin | Neoformat
-    augroup END
-
-  " DeoComplete
-    if has('nvim')
-      call deoplete#enable()
-      set completeopt+=noinsert
-    end
+	" Markdown
+		let g:vim_markdown_folding_disabled = 1
 " }}}
