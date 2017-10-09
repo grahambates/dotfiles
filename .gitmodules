@@ -13,6 +13,3 @@
 [submodule "tmux/tmux-powerline"]
 	path = tmux/tmux-powerline
 	url = git@github.com:erikw/tmux-powerline.git
-[submodule "editorconfig"]
-	path = editorconfig
-	url = https://github.com/editorconfig/editorconfig-vim.git
