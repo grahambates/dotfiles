@@ -13,9 +13,3 @@ ln -s ~/dotfiles/tmux-powerlinerc ~/.tmux-powerline
 ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
 ln -s ~/dotfiles/vimrc ~/.vimrc
 ln -s ~/dotfiles/vim ~/.vim
-
-cd ~/.vim/bundle/YouCompleteMe
-./install.py --clang-completer
-
-cd ~/.vim/bundle/tern_for_vim
-npm install
