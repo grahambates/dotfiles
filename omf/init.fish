@@ -8,6 +8,26 @@ set fish_key_bindings fish_vi_key_bindings
 set fish_bind_mode insert
 export EDITOR=nvim
 
+# Preview for fzf
+function fzf_preview
+  if test -d $argv
+    echo $argv is a directory
+  end
+  if test -f $argv
+    switch (file --mime $argv)
+      case '*binary'
+        echo $argv is a binary file
+      case '*'
+        rougify $argv
+    end
+  end
+end
+
+export FZF_DEFAULT_OPTS="--preview 'fzf_preview {}'"
+export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+
 alias mux=tmuxinator
 alias vim=nvim
 alias vi=nvim

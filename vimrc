@@ -57,8 +57,8 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 " General
-  let mapleader = ',' " Set leader to ','
-  noremap \ ,
+  map <Space> <Leader>
+	map <Leader><Space> <Plug>(easymotion-prefix)
   set shortmess+=filmnrxcoOtT " Abbrev. of messages (avoids 'hit enter')
   set wildmode=longest,list,full " Better command completion
   " Keyboard mash to escape
@@ -122,7 +122,7 @@ call plug#end()
   set wildignore+=.git,vendor,node_modules,reports,.idea " Project and vendor dirs
 
 " Visual guides
-  set textwidth=120 colorcolumn=+1 " Highlight maximum line length
+  set textwidth=80 colorcolumn=+1 " Highlight maximum line length
   set cursorline " Highlight line with cursor
   set number relativenumber " Show relative line numbers
   set showcmd " Show the command being typed
@@ -171,10 +171,14 @@ call plug#end()
 
   " FZF
 		nmap <leader>fb :Buffers<CR>
+		nmap <leader><tab> :Buffers<CR>
 		nmap <leader>ff :Files<CR>
+		nmap <leader><CR> :Files<CR>
 		nmap <leader>fm :Marks<CR>
 		nmap <leader>fw :Windows<CR>
 		nmap <leader>fg :GFiles<CR>
+		nmap <leader>fa :Ag<CR>
+		nmap <leader>s :Ag<CR>
 
 	" Deoplete
 		call deoplete#enable()
