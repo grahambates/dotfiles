@@ -192,11 +192,11 @@ call plug#end()
 		augroup END
 
   " Fugitive
-		nnoremap <leader>gs :Gstatus<CR>
-		nnoremap <leader>gc :Gcommit<CR>
-		nnoremap <leader>gd :Gdiff<CR>
-		nnoremap <leader>gb :Gblame<CR>
-		nnoremap <leader>gf :Gfetch<CR>
+    nnoremap <leader>gs :Gstatus<CR>
+    nnoremap <leader>gc :Gcommit<CR>
+    nnoremap <leader>gd :Gdiff<CR>
+    nnoremap <leader>gb :Gblame<CR>
+    nnoremap <leader>gf :Gfetch<CR>
 
 	" Javascript
 		let g:javascript_plugin_jsdoc = 1 " Enable sytax highlighting for docblocks
@@ -212,6 +212,21 @@ call plug#end()
 		autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
 		autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
 
-	" Markdown
-		let g:vim_markdown_folding_disabled = 1
+  " Dash
+    nmap <silent> <leader>d <Plug>DashSearch
+
+  " Markdown
+    let g:vim_markdown_folding_disabled = 1
+
+  " Neoformat
+    augroup fmt
+      autocmd!
+      autocmd BufWritePre * undojoin | Neoformat
+    augroup END
+
+  " DeoComplete
+    if has('nvim')
+      call deoplete#enable()
+      set completeopt+=noinsert
+    end
 " }}}
