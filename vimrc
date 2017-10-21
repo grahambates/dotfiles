@@ -1,4 +1,5 @@
 call plug#begin('~/.vim/plugged')
+
 " Make vim's defaults match nvim
 	if !has('nvim')
 		Plug 'tpope/vim-sensible'
@@ -17,6 +18,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'tpope/vim-repeat'
 	Plug 'tommcdo/vim-lion'
 	Plug 'editorconfig/editorconfig-vim'
+	Plug 'mbbill/undotree'
+
 
 " Appearance
 	Plug 'itchyny/lightline.vim'
@@ -58,7 +61,6 @@ call plug#end()
 
 " General
   map <Space> <Leader>
-	map <Leader><Space> <Plug>(easymotion-prefix)
   set shortmess+=filmnrxcoOtT " Abbrev. of messages (avoids 'hit enter')
   set wildmode=longest,list,full " Better command completion
   " Keyboard mash to escape
@@ -229,4 +231,11 @@ call plug#end()
       call deoplete#enable()
       set completeopt+=noinsert
     end
+
+	" Undo tree
+		nmap <leader>u :UndotreeToggle<CR>
+
+	" Easymotion
+		map <Leader><Space> <Plug>(easymotion-prefix)
+
 " }}}

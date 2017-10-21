@@ -28,6 +28,8 @@ export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 
+export POWERLINE_CONFIG_COMMAND=Library/Python/3.6/bin/powerline-config
+
 alias mux=tmuxinator
 alias vim=nvim
 alias vi=nvim
