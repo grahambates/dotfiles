@@ -5,6 +5,7 @@ package composer
 package foreign-env
 package kill-on-port
 package thefuck
+package vcs
 theme agnoster
 theme bobthefish
 theme clearance

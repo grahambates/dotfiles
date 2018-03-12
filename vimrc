@@ -20,10 +20,11 @@ call plug#begin('~/.vim/plugged')
 	Plug 'editorconfig/editorconfig-vim'
 	Plug 'mbbill/undotree'
 
-
 " Appearance
 	Plug 'itchyny/lightline.vim'
 	Plug 'tomasr/molokai'
+	Plug 'nanotech/jellybeans.vim'
+	Plug 'luochen1990/rainbow'
 
 " Search
 	Plug 'mileszs/ack.vim'
@@ -32,7 +33,7 @@ call plug#begin('~/.vim/plugged')
 
 " Formatting
 	Plug 'w0rp/ale'
-	Plug 'sbdchd/neoformat'
+	" Plug 'sbdchd/neoformat'
 
 " Utility
 	Plug 'tpope/vim-fugitive'
@@ -44,7 +45,13 @@ call plug#begin('~/.vim/plugged')
 	Plug 'alampros/vim-styled-jsx', { 'for': 'javascript' }
 	Plug 'Galooshi/vim-import-js', { 'for': 'javascript' }
 	Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-	Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+	Plug 'Quramy/vim-js-pretty-template', { 'for': 'javascript' }
+
+	" Typescript
+	" Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
+	Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+	Plug 'mhartington/nvim-typescript', { 'for': 'typescript' }
+
 	" PHP
 	Plug 'StanAngeloff/php.vim', { 'for': 'php' }
 	Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
@@ -54,8 +61,8 @@ call plug#begin('~/.vim/plugged')
 
 " Completion
 	Plug 'junegunn/fzf.vim'
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 
 call plug#end()
 
@@ -67,7 +74,7 @@ call plug#end()
   imap jk <Esc>
   imap kj <Esc>
   set scrolloff=10
-	colorscheme molokai
+	colorscheme jellybeans
 
   " Disable seldom used commands
   nnoremap Q <nop>
@@ -161,6 +168,20 @@ call plug#end()
   set foldmethod=syntax
   set foldlevel=99
 
+" Terminal
+	tnoremap <C-n> <C-\><C-n>
+	tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+	tnoremap <C-h> <C-\><C-N><C-w>h
+	tnoremap <C-j> <C-\><C-N><C-w>j
+	tnoremap <C-k> <C-\><C-N><C-w>k
+	tnoremap <C-l> <C-\><C-N><C-w>l
+	autocmd TermOpen * startinsert
+	autocmd BufWinEnter,WinEnter term://* startinsert
+	autocmd BufLeave term://* stopinsert
+
+" Completion
+  set completeopt=noselect,noinsert
+
 " Plugins {{{
 "
   " Nerdtree
@@ -181,17 +202,6 @@ call plug#end()
 		nmap <leader>fg :GFiles<CR>
 		nmap <leader>fa :Ag<CR>
 		nmap <leader>s :Ag<CR>
-
-	" Deoplete
-		call deoplete#enable()
-		set completeopt+=noinsert
-		let g:deoplete#sources#ternjs#filetypes = ['javascript', 'jsx', 'javascript.jsx', 'vue']
-
-	" Neoformat
-		augroup fmt
-			autocmd!
-			autocmd BufWritePre * undojoin | Neoformat
-		augroup END
 
   " Fugitive
     nnoremap <leader>gs :Gstatus<CR>
@@ -214,23 +224,8 @@ call plug#end()
 		autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
 		autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
 
-  " Dash
-    nmap <silent> <leader>d <Plug>DashSearch
-
   " Markdown
     let g:vim_markdown_folding_disabled = 1
-
-  " Neoformat
-    augroup fmt
-      autocmd!
-      autocmd BufWritePre * undojoin | Neoformat
-    augroup END
-
-  " DeoComplete
-    if has('nvim')
-      call deoplete#enable()
-      set completeopt+=noinsert
-    end
 
 	" Undo tree
 		nmap <leader>u :UndotreeToggle<CR>
@@ -238,4 +233,37 @@ call plug#end()
 	" Easymotion
 		map <Leader><Space> <Plug>(easymotion-prefix)
 
+	" RainbowParentheses
+		let g:rainbow_active = 1
+
+	" Deoplete
+		call deoplete#enable()
+		let g:deoplete#sources#ternjs#filetypes = ['javascript', 'jsx', 'javascript.jsx', 'vue']
+		let g:deoplete#enable_ignore_case = 0
+
+		" <TAB>: completion
+		inoremap <silent><expr> <TAB>
+			\ pumvisible() ? "\<C-n>" :
+			\ <SID>check_back_space() ? "\<TAB>" :
+			\ deoplete#mappings#manual_complete()
+		function! s:check_back_space() abort
+			let col = col('.') - 1
+			return !col || getline('.')[col - 1]  =~ '\s'
+		endfunction
+
+		" <CR>: close popup and save indent.
+		inoremap <expr> <CR> (pumvisible() ? deoplete#close_popup() : "\<CR>")
+
+	" ALE
+	  let g:ale_fixers = {
+		\  'javascript': ['prettier'],
+		\  'javascript.jsx': ['prettier'],
+		\  'typescript': ['prettier']
+	  \}
+    nnoremap <leader>f :ALEFix<CR>
+		let g:ale_javascript_prettier_use_local_config = 1
+	  let g:ale_lint_on_save = 1
+
+	" Tern
+	  let g:tern_map_keys = 1
 " }}}

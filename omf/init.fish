@@ -30,6 +30,12 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export POWERLINE_CONFIG_COMMAND=Library/Python/3.6/bin/powerline-config
 
+# Add project npm bin to path
+export PATH="./node_modules/.bin:$PATH"
+
+set -x PATH "$HOME/.pyenv/bin" $PATH
+. (pyenv init - | psub)
+
 alias mux=tmuxinator
 alias vim=nvim
 alias vi=nvim
