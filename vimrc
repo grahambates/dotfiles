@@ -9,7 +9,9 @@ call plug#begin('~/.vim/plugged')
 	Plug 'christoomey/vim-tmux-navigator'
 	Plug 'easymotion/vim-easymotion'
 	Plug 'tpope/vim-unimpaired'
-	Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+	Plug 'tpope/vim-vinegar'
+	Plug 'justinmk/vim-dirvish'
+	Plug 'tpope/vim-eunuch'
 
 " Editing
 	Plug 'godlygeek/tabular'
@@ -22,8 +24,7 @@ call plug#begin('~/.vim/plugged')
 
 " Appearance
 	Plug 'itchyny/lightline.vim'
-	Plug 'tomasr/molokai'
-	Plug 'nanotech/jellybeans.vim'
+	Plug 'chriskempson/base16-vim'
 	Plug 'luochen1990/rainbow'
 
 " Search
@@ -43,14 +44,13 @@ call plug#begin('~/.vim/plugged')
 	Plug 'mxw/vim-jsx' " Need to load on startup to enable filetypes
 	Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 	Plug 'alampros/vim-styled-jsx', { 'for': 'javascript' }
-	Plug 'Galooshi/vim-import-js', { 'for': 'javascript' }
 	Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
 	Plug 'Quramy/vim-js-pretty-template', { 'for': 'javascript' }
 
 	" Typescript
-	" Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 	Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 	Plug 'mhartington/nvim-typescript', { 'for': 'typescript' }
+	Plug 'peitalin/vim-jsx-typescript', { 'for': 'typescript' }
 
 	" PHP
 	Plug 'StanAngeloff/php.vim', { 'for': 'php' }
@@ -74,11 +74,30 @@ call plug#end()
   imap jk <Esc>
   imap kj <Esc>
   set scrolloff=10
-	colorscheme jellybeans
+	let base16colorspace=256  " Access colors present in 256 colorspace
+	colorscheme base16-phd
+	if filereadable(expand("~/.vimrc_background"))
+		let base16colorspace=256
+		source ~/.vimrc_background
+	endif
+	hi LineNr ctermbg=black
+	hi LineNr ctermfg=darkgrey
+  hi xmlEndTag ctermfg=blue
+  hi jsxCloseString ctermfg=blue
+  hi jsxAttrib ctermfg=yellow
+  hi jsxAttributeBraces ctermfg=lightblue
+	let g:rainbow_conf = {
+	\  'guifgs': ['lightblue', 'magenta', 'yellow', 'green'],
+	\  'ctermfgs': ['lightblue', 'magenta', 'yellow', 'green']
+	\}
 
   " Disable seldom used commands
   nnoremap Q <nop>
-  " nnoremap K <nop>
+
+" Explore
+	nnoremap <Leader>e :Dirvish <enter>
+	nnoremap <Leader>E :Explore <enter>
+	let g:netrw_liststyle=3
 
 " System
   set mouse=a " Enable mouse
@@ -131,7 +150,7 @@ call plug#end()
   set wildignore+=.git,vendor,node_modules,reports,.idea " Project and vendor dirs
 
 " Visual guides
-  set textwidth=80 colorcolumn=+1 " Highlight maximum line length
+  set textwidth=120 colorcolumn=+1 " Highlight maximum line length
   set cursorline " Highlight line with cursor
   set number relativenumber " Show relative line numbers
   set showcmd " Show the command being typed
@@ -148,7 +167,7 @@ call plug#end()
 " Spelling
   if has("spell")
     set spelllang=en_gb
-    nnoremap <leader>s :set spell!<CR>
+    nnoremap <leader>? :set spell!<CR>
   endif
 
 " Fix common command typos
@@ -184,10 +203,6 @@ call plug#end()
 
 " Plugins {{{
 "
-  " Nerdtree
-		nnoremap <Leader>e :NERDTreeToggle <enter>
-		let g:NERDTreeShowHidden=1
-		let g:NERDTreeIgnore=['\.git$', '\.npm$']
 
   " Ack
 		let g:ackprg = 'ag --vimgrep'

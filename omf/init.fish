@@ -23,6 +23,16 @@ function fzf_preview
   end
 end
 
+# emacs ansi-term support
+if test -n "$EMACS"
+		set -x TERM eterm-color
+else
+	# Base16 Shell
+	if status --is-interactive
+			eval sh $HOME/.config/base16-shell/scripts/base16-phd.sh
+	end
+end
+
 export FZF_DEFAULT_OPTS="--preview 'fzf_preview {}'"
 export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -33,8 +43,8 @@ export POWERLINE_CONFIG_COMMAND=Library/Python/3.6/bin/powerline-config
 # Add project npm bin to path
 export PATH="./node_modules/.bin:$PATH"
 
-set -x PATH "$HOME/.pyenv/bin" $PATH
-. (pyenv init - | psub)
+# Python 2
+export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
 
 alias mux=tmuxinator
 alias vim=nvim
