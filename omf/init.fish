@@ -44,7 +44,7 @@ export POWERLINE_CONFIG_COMMAND=Library/Python/3.6/bin/powerline-config
 export PATH="./node_modules/.bin:$PATH"
 
 # Python 2
-export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
+# export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
 
 alias mux=tmuxinator
 alias vim=nvim

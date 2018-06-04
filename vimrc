@@ -255,6 +255,8 @@ call plug#end()
 		call deoplete#enable()
 		let g:deoplete#sources#ternjs#filetypes = ['javascript', 'jsx', 'javascript.jsx', 'vue']
 		let g:deoplete#enable_ignore_case = 0
+		let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+		let g:deoplete#ignore_sources.php = ['omni']
 
 		" <TAB>: completion
 		inoremap <silent><expr> <TAB>
