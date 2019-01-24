@@ -8,10 +8,10 @@ call plug#begin('~/.vim/plugged')
 " Navigation
 	Plug 'christoomey/vim-tmux-navigator'
 	Plug 'easymotion/vim-easymotion'
-	Plug 'tpope/vim-unimpaired'
-	Plug 'tpope/vim-vinegar'
+  Plug 'tpope/vim-unimpaired'
 	Plug 'justinmk/vim-dirvish'
 	Plug 'tpope/vim-eunuch'
+  Plug 'unblevable/quick-scope'
 
 " Editing
 	Plug 'godlygeek/tabular'
@@ -21,6 +21,9 @@ call plug#begin('~/.vim/plugged')
 	Plug 'tommcdo/vim-lion'
 	Plug 'editorconfig/editorconfig-vim'
 	Plug 'mbbill/undotree'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'osyo-manga/vim-over'
+  Plug 'junegunn/vim-peekaboo'
 
 " Appearance
 	Plug 'itchyny/lightline.vim'
@@ -34,7 +37,6 @@ call plug#begin('~/.vim/plugged')
 
 " Formatting
 	Plug 'w0rp/ale'
-	" Plug 'sbdchd/neoformat'
 
 " Utility
 	Plug 'tpope/vim-fugitive'
@@ -61,8 +63,6 @@ call plug#begin('~/.vim/plugged')
 
 " Completion
 	Plug 'junegunn/fzf.vim'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 
 call plug#end()
 
@@ -91,6 +91,9 @@ call plug#end()
 	\  'ctermfgs': ['lightblue', 'magenta', 'yellow', 'green']
 	\}
 
+	nnoremap <Leader>ev :edit ~/.vimrc <enter>
+	nnoremap <Leader>sv :source ~/.vimrc <enter>
+
   " Disable seldom used commands
   nnoremap Q <nop>
 
@@ -100,14 +103,17 @@ call plug#end()
 	let g:netrw_liststyle=3
 
 " System
-  set mouse=a " Enable mouse
+  "set mouse=a " Enable mouse
+  set mouse= " Disable mouse
   " Fix mouse select in iTerm - not needed in neovim
   if !has('nvim')
     set ttymouse=xterm2
   endif
   " Disable tmp files
-  set nobackup
-  set noswapfile
+  "set nobackup
+  "set noswapfile
+  set undofile
+  set directory=$HOME/.vim/swapfiles//
 
 " Tabs
   set expandtab
@@ -123,8 +129,8 @@ call plug#end()
   " Always keep search results in the center.
   map N Nzz
   map n nzz
-  " Clear search highlight
-  nnoremap <Leader>/ :nohls <enter>
+  " Clear search highlight and redraw
+  nnoremap <leader>c :nohls <enter> :redraw! <enter>
 
 " Buffers
   set hidden " Hide unsaved buffers
@@ -134,9 +140,9 @@ call plug#end()
   nnoremap <Leader>Q :qall <enter>
 
 " Splits
-  set splitbelow " Default split directions
-  set splitright
-  set fillchars= " Get rid of '|' in vertical split
+  "set splitbelow " Default split directions
+  "set splitright
+  "set fillchars= " Get rid of '|' in vertical split
   autocmd FileType help wincmd L " Open help on right
 
 " Registers
@@ -199,7 +205,10 @@ call plug#end()
 	autocmd BufLeave term://* stopinsert
 
 " Completion
-  set completeopt=noselect,noinsert
+  set completeopt=menu,preview
+
+" Abbreviations
+  abbr @@ hello@grahambates.com
 
 " Plugins {{{
 "
@@ -216,7 +225,7 @@ call plug#end()
 		nmap <leader>fw :Windows<CR>
 		nmap <leader>fg :GFiles<CR>
 		nmap <leader>fa :Ag<CR>
-		nmap <leader>s :Ag<CR>
+		nmap <leader>/ :Ag<CR>
 
   " Fugitive
     nnoremap <leader>gs :Gstatus<CR>
@@ -251,36 +260,54 @@ call plug#end()
 	" RainbowParentheses
 		let g:rainbow_active = 1
 
-	" Deoplete
-		call deoplete#enable()
-		let g:deoplete#sources#ternjs#filetypes = ['javascript', 'jsx', 'javascript.jsx', 'vue']
-		let g:deoplete#enable_ignore_case = 0
-		let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-		let g:deoplete#ignore_sources.php = ['omni']
-
-		" <TAB>: completion
-		inoremap <silent><expr> <TAB>
-			\ pumvisible() ? "\<C-n>" :
-			\ <SID>check_back_space() ? "\<TAB>" :
-			\ deoplete#mappings#manual_complete()
-		function! s:check_back_space() abort
-			let col = col('.') - 1
-			return !col || getline('.')[col - 1]  =~ '\s'
-		endfunction
-
-		" <CR>: close popup and save indent.
-		inoremap <expr> <CR> (pumvisible() ? deoplete#close_popup() : "\<CR>")
-
 	" ALE
+    let g:ale_linters = {
+    \   'javascript': ['eslint'],
+    \   'javascript.jsx': ['eslint'],
+    \   'typescript': ['tslint']
+    \}
 	  let g:ale_fixers = {
-		\  'javascript': ['prettier'],
-		\  'javascript.jsx': ['prettier'],
-		\  'typescript': ['prettier']
+		\  'javascript': ['eslint'],
+		\  'javascript.jsx': ['eslint'],
+		\  'typescript': ['tslint']
 	  \}
-    nnoremap <leader>f :ALEFix<CR>
+    let g:ale_javascript_eslint_use_global = 1
+    let g:ale_javascript_eslint_executable = 'eslint_d'
 		let g:ale_javascript_prettier_use_local_config = 1
 	  let g:ale_lint_on_save = 1
+    "nnoremap <leader>f :call QuickAleFix()<CR>
+    nnoremap <leader>F :ALEFix<CR>
+
+    " Disable syntax while running fixer
+		function! QuickAleFix()
+      set syntax=
+			ALEFix
+      sleep 1000m
+      set syntax=on
+		endfunction
 
 	" Tern
 	  let g:tern_map_keys = 1
+
+  " Easy align
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
+
+  " Quick Scope
+    let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+  " Disable cursor keys
+    inoremap <Left>  <NOP>
+    inoremap <Right> <NOP>
+    inoremap <Up>    <NOP>
+    inoremap <Down>  <NOP>
+    nnoremap <Left>  <NOP>
+    nnoremap <Right> <NOP>
+    nnoremap <Up>    <NOP>
+    nnoremap <Down>  <NOP>
+
+    let g:over_enable_auto_nohlsearch = 1
+    let g:over_enable_cmd_window = 1
 " }}}

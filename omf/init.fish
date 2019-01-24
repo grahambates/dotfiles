@@ -1,4 +1,4 @@
-nvm use 8
+#nvm use 8
 
 # Disable right prompt
 function fish_right_prompt
@@ -29,12 +29,15 @@ if test -n "$EMACS"
 else
 	# Base16 Shell
 	if status --is-interactive
-			eval sh $HOME/.config/base16-shell/scripts/base16-phd.sh
+      # eval sh $HOME/.config/base16-shell/scripts/base16-gruvbox-dark-medium.sh
+      eval sh $HOME/.config/base16-shell/scripts/base16-harmonic-dark.sh
 	end
 end
 
 export FZF_DEFAULT_OPTS="--preview 'fzf_preview {}'"
-export FZF_DEFAULT_COMMAND='ag -g ""'
+# export FZF_DEFAULT_COMMAND='ag -g ""'
+# export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_COMMAND='rg --files --follow'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 
