@@ -46,8 +46,8 @@ export POWERLINE_CONFIG_COMMAND=Library/Python/3.6/bin/powerline-config
 # Add project npm bin to path
 export PATH="./node_modules/.bin:$PATH"
 
-# Python 2
-# export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
+# Add brew ruby to path
+set -g fish_user_paths "/usr/local/opt/ruby/bin" $fish_user_paths
 
 alias mux=tmuxinator
 alias vim=nvim

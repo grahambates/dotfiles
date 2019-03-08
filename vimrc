@@ -1,68 +1,71 @@
 call plug#begin('~/.vim/plugged')
 
 " Make vim's defaults match nvim
-	if !has('nvim')
-		Plug 'tpope/vim-sensible'
-	endif
+  if !has('nvim')
+    Plug 'tpope/vim-sensible'
+  endif
 
 " Navigation
-	Plug 'christoomey/vim-tmux-navigator'
-	Plug 'easymotion/vim-easymotion'
+  Plug 'christoomey/vim-tmux-navigator'
+  " Complementary pairs of mappings with ][
   Plug 'tpope/vim-unimpaired'
-	Plug 'justinmk/vim-dirvish'
-	Plug 'tpope/vim-eunuch'
+  " Nicer file navigator
+  Plug 'justinmk/vim-dirvish'
+  " Vim sugar for the UNIX shell commands e.g. Rename, Delete
+  Plug 'tpope/vim-eunuch'
+	" highlights which characters to target for f, F and family
   Plug 'unblevable/quick-scope'
 
 " Editing
-	Plug 'godlygeek/tabular'
-	Plug 'tpope/vim-surround'
-	Plug 'tpope/vim-commentary'
-	Plug 'tpope/vim-repeat'
-	Plug 'tommcdo/vim-lion'
-	Plug 'editorconfig/editorconfig-vim'
-	Plug 'mbbill/undotree'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-repeat'
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'mbbill/undotree'
+  " Align characters with ga
   Plug 'junegunn/vim-easy-align'
-  Plug 'osyo-manga/vim-over'
+	" Register preview
   Plug 'junegunn/vim-peekaboo'
 
 " Appearance
-	Plug 'itchyny/lightline.vim'
-	Plug 'chriskempson/base16-vim'
-	Plug 'luochen1990/rainbow'
+  Plug 'itchyny/lightline.vim'
+  Plug 'chriskempson/base16-vim'
 
 " Search
-	Plug 'mileszs/ack.vim'
-	Plug 'nelstrom/vim-visual-star-search'
-	Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+  Plug 'mileszs/ack.vim'
+  Plug 'nelstrom/vim-visual-star-search'
+  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 
 " Formatting
-	Plug 'w0rp/ale'
+  Plug 'w0rp/ale'
 
 " Utility
-	Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-fugitive'
 
 " Languages
-	" Javascript
-	Plug 'mxw/vim-jsx' " Need to load on startup to enable filetypes
-	Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-	Plug 'alampros/vim-styled-jsx', { 'for': 'javascript' }
-	Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-	Plug 'Quramy/vim-js-pretty-template', { 'for': 'javascript' }
+  " Javascript
+  Plug 'mxw/vim-jsx' " Need to load on startup to enable filetypes
+  Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+  Plug 'alampros/vim-styled-jsx', { 'for': 'javascript' }
+  Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+  Plug 'Quramy/vim-js-pretty-template', { 'for': 'javascript' }
+  Plug 'hdima/python-syntax', { 'for': 'python' }
 
-	" Typescript
-	Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-	Plug 'mhartington/nvim-typescript', { 'for': 'typescript' }
-	Plug 'peitalin/vim-jsx-typescript', { 'for': 'typescript' }
+  " Typescript
+  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+  Plug 'mhartington/nvim-typescript', { 'for': 'typescript' }
+  Plug 'peitalin/vim-jsx-typescript', { 'for': 'typescript' }
 
-	" PHP
-	Plug 'StanAngeloff/php.vim', { 'for': 'php' }
-	Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-	Plug 'arnaud-lb/vim-php-namespace', { 'for': 'php' }
-	" Markdown
-	Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+  " PHP
+  Plug 'StanAngeloff/php.vim', { 'for': 'php' }
+  Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+  Plug 'arnaud-lb/vim-php-namespace', { 'for': 'php' }
 
-" Completion
-	Plug 'junegunn/fzf.vim'
+  " Markdown
+  Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+
+  " Elm
+  Plug 'elmcast/elm-vim', { 'for': 'elm' }
 
 call plug#end()
 
@@ -74,42 +77,38 @@ call plug#end()
   imap jk <Esc>
   imap kj <Esc>
   set scrolloff=10
-	let base16colorspace=256  " Access colors present in 256 colorspace
-	colorscheme base16-phd
-	if filereadable(expand("~/.vimrc_background"))
-		let base16colorspace=256
-		source ~/.vimrc_background
-	endif
-	hi LineNr ctermbg=black
-	hi LineNr ctermfg=darkgrey
+  let base16colorspace=256  " Access colors present in 256 colorspace
+  colorscheme base16-phd
+  if filereadable(expand("~/.vimrc_background"))
+    let base16colorspace=256
+    source ~/.vimrc_background
+  endif
+  hi LineNr ctermbg=black
+  hi LineNr ctermfg=darkgrey
   hi xmlEndTag ctermfg=blue
   hi jsxCloseString ctermfg=blue
   hi jsxAttrib ctermfg=yellow
   hi jsxAttributeBraces ctermfg=lightblue
-	let g:rainbow_conf = {
-	\  'guifgs': ['lightblue', 'magenta', 'yellow', 'green'],
-	\  'ctermfgs': ['lightblue', 'magenta', 'yellow', 'green']
-	\}
 
-	nnoremap <Leader>ev :edit ~/.vimrc <enter>
-	nnoremap <Leader>sv :source ~/.vimrc <enter>
+  nnoremap <Leader>ev :edit ~/.vimrc <enter>
+  nnoremap <Leader>sv :source ~/.vimrc <enter>
 
   " Disable seldom used commands
   nnoremap Q <nop>
 
 " Explore
-	nnoremap <Leader>e :Dirvish <enter>
-	nnoremap <Leader>E :Explore <enter>
-	let g:netrw_liststyle=3
+  nnoremap <Leader>e :Dirvish <enter>
+  nnoremap <Leader>E :Explore <enter>
+  let g:netrw_liststyle=3
 
 " System
-  "set mouse=a " Enable mouse
-  set mouse= " Disable mouse
+  set mouse=a " Enable mouse
+  "set mouse= " Disable mouse
   " Fix mouse select in iTerm - not needed in neovim
   if !has('nvim')
     set ttymouse=xterm2
   endif
-  " Disable tmp files
+  " Temp files
   "set nobackup
   "set noswapfile
   set undofile
@@ -194,15 +193,15 @@ call plug#end()
   set foldlevel=99
 
 " Terminal
-	tnoremap <C-n> <C-\><C-n>
-	tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-	tnoremap <C-h> <C-\><C-N><C-w>h
-	tnoremap <C-j> <C-\><C-N><C-w>j
-	tnoremap <C-k> <C-\><C-N><C-w>k
-	tnoremap <C-l> <C-\><C-N><C-w>l
-	autocmd TermOpen * startinsert
-	autocmd BufWinEnter,WinEnter term://* startinsert
-	autocmd BufLeave term://* stopinsert
+  tnoremap <C-n> <C-\><C-n>
+  tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  tnoremap <C-h> <C-\><C-N><C-w>h
+  tnoremap <C-j> <C-\><C-N><C-w>j
+  tnoremap <C-k> <C-\><C-N><C-w>k
+  tnoremap <C-l> <C-\><C-N><C-w>l
+  autocmd TermOpen * startinsert
+  autocmd BufWinEnter,WinEnter term://* startinsert
+  autocmd BufLeave term://* stopinsert
 
 " Completion
   set completeopt=menu,preview
@@ -214,18 +213,18 @@ call plug#end()
 "
 
   " Ack
-		let g:ackprg = 'ag --vimgrep'
+    let g:ackprg = 'ag --vimgrep'
 
   " FZF
-		nmap <leader>fb :Buffers<CR>
-		nmap <leader><tab> :Buffers<CR>
-		nmap <leader>ff :Files<CR>
-		nmap <leader><CR> :Files<CR>
-		nmap <leader>fm :Marks<CR>
-		nmap <leader>fw :Windows<CR>
-		nmap <leader>fg :GFiles<CR>
-		nmap <leader>fa :Ag<CR>
-		nmap <leader>/ :Ag<CR>
+    nmap <leader>fb :Buffers<CR>
+    nmap <leader><tab> :Buffers<CR>
+    nmap <leader>ff :Files<CR>
+    nmap <leader><CR> :Files<CR>
+    nmap <leader>fm :Marks<CR>
+    nmap <leader>fw :Windows<CR>
+    nmap <leader>fg :GFiles<CR>
+    nmap <leader>fa :Ag<CR>
+    nmap <leader>/ :Ag<CR>
 
   " Fugitive
     nnoremap <leader>gs :Gstatus<CR>
@@ -234,66 +233,54 @@ call plug#end()
     nnoremap <leader>gb :Gblame<CR>
     nnoremap <leader>gf :Gfetch<CR>
 
-	" Javascript
-		let g:javascript_plugin_jsdoc = 1 " Enable sytax highlighting for docblocks
+  " Javascript
+    let g:javascript_plugin_jsdoc = 1 " Enable sytax highlighting for docblocks
 
-	" JSX
-		let g:jsx_ext_required = 0
+  " JSX
+    let g:jsx_ext_required = 0
 
-	" PHP namespace
-		function! IPhpInsertUse()
-			call PhpInsertUse()
-			call feedkeys('a',  'n')
-		endfunction
-		autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-		autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
+  " PHP namespace
+    function! IPhpInsertUse()
+      call PhpInsertUse()
+      call feedkeys('a',  'n')
+    endfunction
+    autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
+    autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
 
   " Markdown
     let g:vim_markdown_folding_disabled = 1
 
-	" Undo tree
-		nmap <leader>u :UndotreeToggle<CR>
+  " Undo tree
+    nmap <leader>u :UndotreeToggle<CR>
 
-	" Easymotion
-		map <Leader><Space> <Plug>(easymotion-prefix)
-
-	" RainbowParentheses
-		let g:rainbow_active = 1
-
-	" ALE
+  " ALE
     let g:ale_linters = {
     \   'javascript': ['eslint'],
     \   'javascript.jsx': ['eslint'],
     \   'typescript': ['tslint']
     \}
-	  let g:ale_fixers = {
-		\  'javascript': ['eslint'],
-		\  'javascript.jsx': ['eslint'],
-		\  'typescript': ['tslint']
-	  \}
+    let g:ale_fixers = {
+    \  'javascript': ['eslint'],
+    \  'javascript.jsx': ['eslint'],
+    \  'typescript': ['tslint']
+    \}
     let g:ale_javascript_eslint_use_global = 1
     let g:ale_javascript_eslint_executable = 'eslint_d'
-		let g:ale_javascript_prettier_use_local_config = 1
-	  let g:ale_lint_on_save = 1
-    "nnoremap <leader>f :call QuickAleFix()<CR>
-    nnoremap <leader>F :ALEFix<CR>
+    let g:ale_javascript_prettier_use_local_config = 1
+    let g:ale_fix_on_save = 1
+    nnoremap <leader>F :call QuickAleFix()<CR>
+    nnoremap <leader>f :ALEFix<CR>
 
     " Disable syntax while running fixer
-		function! QuickAleFix()
+    function! QuickAleFix()
       set syntax=
-			ALEFix
+      ALEFix
       sleep 1000m
       set syntax=on
-		endfunction
+    endfunction
 
-	" Tern
-	  let g:tern_map_keys = 1
-
-  " Easy align
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
+  " Tern
+    let g:tern_map_keys = 1
 
   " Quick Scope
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -308,6 +295,8 @@ call plug#end()
     nnoremap <Up>    <NOP>
     nnoremap <Down>  <NOP>
 
-    let g:over_enable_auto_nohlsearch = 1
-    let g:over_enable_cmd_window = 1
+  " Python
+    let python_highlight_all = 1
+    let g:python_host_prog = '/usr/local/bin/python2'
+    let g:python3_host_prog = '/usr/local/bin/python3'
 " }}}
