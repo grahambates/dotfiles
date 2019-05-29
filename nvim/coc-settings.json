@@ -1,4 +1,6 @@
 {
+  "javascript.validate.enable": false,
+  "typescript.validate.enable": false,
   "languageserver": {
     "golang": {
       "command": "gopls",

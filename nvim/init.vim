@@ -17,6 +17,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-repeat'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'mbbill/undotree'
+  Plug 'machakann/vim-highlightedyank'
   " Align characters with ga
   Plug 'junegunn/vim-easy-align'
 	" Register preview
@@ -27,10 +28,14 @@ call plug#begin('~/.vim/plugged')
 
 " Appearance
   Plug 'itchyny/lightline.vim'
+  Plug 'chriskempson/base16-vim'
+  Plug 'joshdick/onedark.vim'
   Plug 'drewtempelmeyer/palenight.vim'
-
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'morhetz/gruvbox'
+  Plug 'rakr/vim-one'
+  Plug 'nanotech/jellybeans.vim'
 " Search
-  Plug 'mileszs/ack.vim'
   Plug 'nelstrom/vim-visual-star-search'
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 
@@ -40,6 +45,7 @@ call plug#begin('~/.vim/plugged')
 " Languages
   Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
   Plug 'sheerun/vim-polyglot'
+  Plug 'lervag/vimtex'
 
 call plug#end()
 
@@ -62,6 +68,10 @@ call plug#end()
   " Paste on new line
   nnoremap <Leader>p :put <enter>
   nnoremap <Leader>P :put! <enter>
+ 
+  "replace the word under cursor
+  " nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+  nnoremap <leader>* *N:%s//
 
   " Fix common command typos
   if has("user_commands")
@@ -108,24 +118,16 @@ call plug#end()
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
   endif
 
-  "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-  "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-  "(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-  if (empty($TMUX))
-    if (has("nvim"))
-      "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-      let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    endif
-    "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-    "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-    " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-    if (has("termguicolors"))
-      set termguicolors
-    endif
+  " Use 24-bit (true-color) mode
+  if (has("termguicolors"))
+    set termguicolors
   endif
 
   let g:palenight_terminal_italics=1
-  colorscheme palenight
+  let g:one_allow_italics=1
+  let g:gruvbox_italic=1
+  " colorscheme palenight
+  colorscheme one
 
 " File navigation
   nnoremap <Leader>e :Dirvish <enter>
@@ -144,15 +146,16 @@ call plug#end()
   set ignorecase smartcase " Case insensitive search - Unless begins with uppercase
   set gdefault " use global flag by default in s: commands
   set hlsearch " Highlight search
+  set inccommand=nosplit " Substitute preview
   " Always keep search results in the center.
   map N Nzz
   map n nzz
   " Clear search highlight and redraw
   nnoremap <leader>c :nohls <enter> :redraw! <enter>
   " Replace grep program
-  if executable("ag")
-    set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
+  if executable("rg")
+    set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
+    set grepformat=%f:%l:%c:%m
   endif
 
 " Buffers
@@ -176,6 +179,7 @@ call plug#end()
     autocmd BufRead,BufNewFile *.md setlocal spell
     autocmd FileType gitcommit setlocal spell
   endif
+  set dictionary=/usr/share/dict/words
 
 " Folding
   set foldmethod=syntax
@@ -204,9 +208,6 @@ call plug#end()
 
 " Plugins {{{
 
-  " Ack
-    let g:ackprg = 'ag --vimgrep'
-
   " FZF
     nmap <leader>fb :Buffers<CR>
     nmap <leader><tab> :Buffers<CR>
@@ -215,8 +216,8 @@ call plug#end()
     nmap <leader>fm :Marks<CR>
     nmap <leader>fw :Windows<CR>
     nmap <leader>fg :GFiles<CR>
-    nmap <leader>fa :Ag<CR>
-    nmap <leader>/ :Ag<CR>
+    nmap <leader>fa :Rg<CR>
+    nmap <leader>/ :Rg<CR>
 
   " Fugitive
     nnoremap <leader>gs :Gstatus<CR>
@@ -247,6 +248,9 @@ call plug#end()
 
   " Quick Scope
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+  " Highlight Yank
+    let g:highlightedyank_highlight_duration = 250
 
   " Disable cursor keys
     inoremap <Left>  <NOP>
@@ -294,13 +298,13 @@ call plug#end()
     let g:ale_linters = {
     \   'javascript': ['eslint'],
     \   'javascript.jsx': ['eslint'],
-    \   'typescript': ['tslint'],
+    \   'typescript': ['eslint'],
     \   'go': ['golangci-lint']
     \}
     let g:ale_fixers = {
     \  'javascript': ['eslint'],
     \  'javascript.jsx': ['eslint'],
-    \  'typescript': ['tslint'],
+    \  'typescript': ['eslint'],
     \  'go': ['goimports']
     \}
     let g:ale_javascript_eslint_use_global = 1
@@ -317,8 +321,6 @@ call plug#end()
     set cmdheight=2
     " Smaller updatetime for CursorHold & CursorHoldI
     set updatetime=300
-    " don't give |ins-completion-menu| messages.
-    set shortmess+=c
     " always show signcolumns
     set signcolumn=yes
 
@@ -364,5 +366,23 @@ call plug#end()
 
     " Remap for rename current word
     nmap <leader>rn <Plug>(coc-rename)
+
+  " Lightline
+    function! CocCurrentFunction()
+        return get(b:, 'coc_current_function', '')
+    endfunction
+
+    let g:lightline = {
+        \ 'colorscheme': 'palenight',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'cocstatus': 'coc#status',
+        \   'currentfunction': 'CocCurrentFunction'
+        \ },
+        \ }
+
 
 " }}}

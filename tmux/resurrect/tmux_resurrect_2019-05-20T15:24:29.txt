@@ -1,0 +1,29 @@
+pane	0	0	:olc-search	0	:	0	:/Users/batesgw1/olc-search	1	nvim	:nvim
+pane	0	0	:olc-search	0	:	1	:/Users/batesgw1/olc-search	0	zsh	:
+pane	0	0	:olc-search	0	:	2	:/Users/batesgw1/olc-search	0	zsh	:
+pane	0	1	:nvim	0	:	0	:/Users/batesgw1/tvl	1	nvim	:nvim docker/runtime/Dockerfile
+pane	0	1	:nvim	0	:	1	:/Users/batesgw1/tvl	0	zsh	:
+pane	0	1	:nvim	0	:	2	:/Users/batesgw1/tvl	0	zsh	:
+pane	0	1	:nvim	0	:	3	:/Users/batesgw1/tvl	0	zsh	:
+pane	0	2	:tvl-ui	0	:	0	:/Users/batesgw1/tvl-ui	1	nvim	:nvim
+pane	0	2	:tvl-ui	0	:	1	:/Users/batesgw1/tvl-ui	0	zsh	:
+pane	0	2	:tvl-ui	0	:	2	:/Users/batesgw1/tvl-ui	0	node	:npm   
+pane	0	3	:olc-search-test	0	:	0	:/Users/batesgw1/olc-search-checker	0	nvim	:nvim
+pane	0	3	:olc-search-test	0	:	1	:/Users/batesgw1/olc-search-checker	1	zsh	:
+pane	0	4	:kube	0	:	0	:/Users/batesgw1	0	zsh	:
+pane	0	4	:kube	0	:	1	:/Users/batesgw1	0	zsh	:
+pane	0	4	:kube	0	:	2	:/Users/batesgw1	1	zsh	:
+pane	0	5	:data	0	:-	0	:/Users/batesgw1/olc-data-share	0	nvim	:nvim
+pane	0	5	:data	0	:-	1	:/Users/batesgw1/olc-data-share	1	zsh	:
+pane	0	6	:showcase	1	:*	0	:/Users/batesgw1/showcase-env	1	nvim	:nvim vagrant.yml
+pane	0	6	:showcase	1	:*	1	:/Users/batesgw1/showcase-env	0	vagrant	:vagrant ssh pgmaster
+/usr/bin/ssh vagrant@127.0.0.1 -p 2201 -o LogLevel=FATAL -o Compression=yes -o DSAAuthentication=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /Users/batesgw1/showcase-env/.vagrant/machines/pgmaster/virtualbox/private_key
+pane	0	6	:showcase	1	:*	2	:/Users/batesgw1/showcase-env	0	vagrant	:vagrant ssh pgreplica
+window	0	0	0	:	0e48,318x84,0,0{163x84,0,0,0,154x84,164,0[154x40,164,0,1,154x43,164,41,2]}
+window	0	1	0	:	48f0,318x84,0,0{183x84,0,0,3,134x84,184,0[134x21,184,0,4,134x24,184,22,6,134x37,184,47,5]}
+window	0	2	0	:	325a,318x84,0,0{175x84,0,0,9,142x84,176,0[142x41,176,0,10,142x42,176,42,11]}
+window	0	3	0	:	1e34,318x84,0,0{169x84,0,0,17,148x84,170,0,18}
+window	0	4	0	:	3fd4,318x84,0,0{175x84,0,0,14,142x84,176,0[142x41,176,0,15,142x42,176,42,16]}
+window	0	5	0	:-	6119,318x84,0,0{170x84,0,0,19,147x84,171,0,20}
+window	0	6	1	:*	2646,318x84,0,0{174x84,0,0,29,143x84,175,0[143x45,175,0,24,143x38,175,46,27]}
+state	0	
