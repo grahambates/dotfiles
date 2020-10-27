@@ -5,6 +5,8 @@ export PATH="./node_modules/.bin:/usr/local/opt/ruby/bin:$HOME/go/bin:$HOME/.com
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/batesgw1/.oh-my-zsh"
 
+export ZSH_DISABLE_COMPFIX=true
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
