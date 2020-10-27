@@ -28,16 +28,14 @@ call plug#begin('~/.vim/plugged')
 
 " Appearance
   Plug 'itchyny/lightline.vim'
-  Plug 'chriskempson/base16-vim'
-  Plug 'joshdick/onedark.vim'
-  Plug 'drewtempelmeyer/palenight.vim'
-  Plug 'NLKNguyen/papercolor-theme'
-  Plug 'morhetz/gruvbox'
   Plug 'rakr/vim-one'
-  Plug 'nanotech/jellybeans.vim'
+  Plug 'drewtempelmeyer/palenight.vim'
+  Plug 'ayu-theme/ayu-vim'
+
 " Search
   Plug 'nelstrom/vim-visual-star-search'
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+  Plug 'stefandtw/quickfix-reflector.vim'
 
 " Utility
   Plug 'tpope/vim-fugitive'
@@ -61,17 +59,26 @@ call plug#end()
   imap jk <Esc>
   imap kj <Esc>
   " vimrc shortcuts
-  nnoremap <Leader>ev :edit ~/.vimrc <enter>
-  nnoremap <Leader>sv :source ~/.vimrc <enter>
+  nnoremap <Leader>ev :edit ~/.config/nvim/init.vim <enter>
+  nnoremap <Leader>sv :source ~/.config/nvim/init.vim <enter>
   " Disable seldom used commands
   nnoremap Q <nop>
   " Paste on new line
   nnoremap <Leader>p :put <enter>
   nnoremap <Leader>P :put! <enter>
+
+  " More convenient mappings for standard commands
+  nnoremap H ^
+  nnoremap Q @@
+
+  " Delete without clobbering unnamed register
+  nnoremap s "_d
+
+  " Join without space
+  nmap <Leader>j Jx
  
   "replace the word under cursor
-  " nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
-  nnoremap <leader>* *N:%s//
+  nnoremap <Leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
   " Fix common command typos
   if has("user_commands")
@@ -88,8 +95,9 @@ call plug#end()
 
 
 " Editing
-  set backspace= " Prevent backspace past start of edit
-  set scrolloff=10
+  " set backspace= " Prevent backspace past start of edit
+  set scrolloff=10 " Keep 10 lines in view
+  set nojoinspaces " Prevent double space joining on punctuation
   abbr @@ hello@grahambates.com
 
 " Completion
@@ -123,11 +131,9 @@ call plug#end()
     set termguicolors
   endif
 
-  let g:palenight_terminal_italics=1
   let g:one_allow_italics=1
-  let g:gruvbox_italic=1
-  " colorscheme palenight
-  colorscheme one
+  let g:palenight_terminal_italics=1
+  colorscheme palenight
 
 " File navigation
   nnoremap <Leader>e :Dirvish <enter>
@@ -151,7 +157,7 @@ call plug#end()
   map N Nzz
   map n nzz
   " Clear search highlight and redraw
-  nnoremap <leader>c :nohls <enter> :redraw! <enter>
+  nnoremap <Leader>c :nohls <enter> :redraw! <enter>
   " Replace grep program
   if executable("rg")
     set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
@@ -166,14 +172,13 @@ call plug#end()
   nnoremap <Leader>Q :qall <enter>
 
 " Windows/splits
-  "set splitbelow " Default split directions
-  "set splitright
+  set splitbelow " Default split directions
+  set splitright
   autocmd FileType help wincmd L " Open help on right
 
 " Spelling
   if has("spell")
-    "set spelllang=en_gb
-    nnoremap <leader>? :set spell!<CR>
+    nnoremap <Leader>? :set spell!<CR>
     set complete+=kspell
     " Default on for file types
     autocmd BufRead,BufNewFile *.md setlocal spell
@@ -209,22 +214,16 @@ call plug#end()
 " Plugins {{{
 
   " FZF
-    nmap <leader>fb :Buffers<CR>
-    nmap <leader><tab> :Buffers<CR>
-    nmap <leader>ff :Files<CR>
-    nmap <leader><CR> :Files<CR>
-    nmap <leader>fm :Marks<CR>
-    nmap <leader>fw :Windows<CR>
-    nmap <leader>fg :GFiles<CR>
-    nmap <leader>fa :Rg<CR>
-    nmap <leader>/ :Rg<CR>
+    nmap <Leader><TAB> :Buffers<CR>
+    nmap <Leader><CR> :Files<CR>
+    nmap <Leader>/ :Rg<CR>
 
   " Fugitive
-    nnoremap <leader>gs :Gstatus<CR>
-    nnoremap <leader>gc :Gcommit<CR>
-    nnoremap <leader>gd :Gdiff<CR>
-    nnoremap <leader>gb :Gblame<CR>
-    nnoremap <leader>gf :Gfetch<CR>
+    nnoremap <Leader>gs :Gstatus<CR>
+    nnoremap <Leader>gc :Gcommit<CR>
+    nnoremap <Leader>gd :Gdiff<CR>
+    nnoremap <Leader>gb :Gblame<CR>
+    nnoremap <Leader>gf :Gfetch<CR>
 
   " Javascript
     let g:javascript_plugin_jsdoc = 1 " Enable syntax highlighting for docblocks
@@ -244,7 +243,7 @@ call plug#end()
     let g:vim_markdown_folding_disabled = 1
 
   " Undo tree
-    nmap <leader>u :UndotreeToggle<CR>
+    nmap <Leader>u :UndotreeToggle<CR>
 
   " Quick Scope
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -285,20 +284,20 @@ call plug#end()
     let g:go_metalinter_autosave_enabled = []
     let g:go_metalinter_enabled = []
 
-    autocmd FileType go nmap <leader>b  <Plug>(go-build)
-    autocmd FileType go nmap <leader>r  <Plug>(go-run)
-    autocmd FileType go nmap <leader>t  <Plug>(go-test)
-    autocmd FileType go nmap <leader>T  <Plug>(go-test-func)
-    autocmd FileType go nmap <leader>d  <Plug>(go-def)
-    autocmd FileType go nmap <leader>h  <Plug>(go-doc)
-    autocmd FileType go nmap <leader>i  <Plug>(go-info)
-    autocmd FileType go nmap <leader>a  <Plug>(go-alternate-edit)
+    autocmd FileType go nmap <Leader>b  <Plug>(go-build)
+    autocmd FileType go nmap <Leader>r  <Plug>(go-run)
+    autocmd FileType go nmap <Leader>t  <Plug>(go-test)
+    autocmd FileType go nmap <Leader>T  <Plug>(go-test-func)
+    autocmd FileType go nmap <Leader>d  <Plug>(go-def)
+    autocmd FileType go nmap <Leader>h  <Plug>(go-doc)
+    autocmd FileType go nmap <Leader>i  <Plug>(go-info)
+    autocmd FileType go nmap <Leader>a  <Plug>(go-alternate-edit)
   
   " ALE
     let g:ale_linters = {
     \   'javascript': ['eslint'],
     \   'javascript.jsx': ['eslint'],
-    \   'typescript': ['eslint'],
+    \   'typescript': ['tsserver', 'eslint'],
     \   'go': ['golangci-lint']
     \}
     let g:ale_fixers = {
@@ -309,11 +308,10 @@ call plug#end()
     \}
     let g:ale_javascript_eslint_use_global = 1
     let g:ale_javascript_eslint_executable = 'eslint_d'
-    let g:ale_javascript_prettier_use_local_config = 1
     let g:ale_fix_on_save = 1
     let g:ale_go_golangci_lint_package = 1
-    nnoremap <leader>f :ALEFix<CR>
-    nnoremap <leader>l :ALENextWrap<CR>
+    nnoremap <Leader>F :ALEFix<CR>
+    nnoremap <Leader>l :ALENextWrap<CR>
 
   " Coc
 
@@ -365,7 +363,12 @@ call plug#end()
     autocmd CursorHold * silent call CocActionAsync('highlight')
 
     " Remap for rename current word
-    nmap <leader>rn <Plug>(coc-rename)
+    nmap <Leader>rn <Plug>(coc-rename)
+
+    " coc-prettier - map :Prettier command
+    command! -nargs=0 Prettier :CocCommand prettier.formatFile
+    vmap <Leader>f <Plug>(coc-format-selected)
+    nmap <Leader>f :Prettier<CR>
 
   " Lightline
     function! CocCurrentFunction()
@@ -373,7 +376,6 @@ call plug#end()
     endfunction
 
     let g:lightline = {
-        \ 'colorscheme': 'palenight',
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
@@ -383,6 +385,5 @@ call plug#end()
         \   'currentfunction': 'CocCurrentFunction'
         \ },
         \ }
-
 
 " }}}
