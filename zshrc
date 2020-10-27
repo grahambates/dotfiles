@@ -1,6 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="./node_modules/.bin:/usr/local/opt/ruby/bin:$HOME/go/bin:$HOME/.composer/vendor/bin:$PATH" 
+export PATH="./node_modules/.bin:../../node_modules/.bin:/usr/local/opt/ruby/bin:$HOME/go/bin:$HOME/.composer/vendor/bin:$HOME/Library/Python/3.7/bin:$PATH" 
+export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+
+# Aspera client
+export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH
+export MANPATH=/Users/batesgw1/Applications/Aspera\ CLI/share/man:$MANPATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/batesgw1/.oh-my-zsh"
@@ -131,3 +136,10 @@ export FZF_DEFAULT_COMMAND='rg --files --follow'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 export BAT_THEME="TwoDark"
+
+# Autojump
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+# Per the security update https://groups.google.com/forum/#!topic/golang-announce/X7N1mvntnoU you may need whitelist the
+# -Xpreprocessor flag in your environment.
+export CGO_CFLAGS_ALLOW='-Xpreprocessor'
