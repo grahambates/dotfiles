@@ -23,26 +23,28 @@ call plug#begin('~/.vim/plugged')
 	" Register preview
   Plug 'junegunn/vim-peekaboo'
 
-" Formatting
-  Plug 'w0rp/ale'
-
 " Appearance
   Plug 'itchyny/lightline.vim'
-  Plug 'rakr/vim-one'
   Plug 'drewtempelmeyer/palenight.vim'
-  Plug 'ayu-theme/ayu-vim'
 
 " Search
   Plug 'nelstrom/vim-visual-star-search'
-  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
   Plug 'stefandtw/quickfix-reflector.vim'
+  " dependencies
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  " telescope
+  Plug 'nvim-telescope/telescope.nvim'
 
 " Utility
   Plug 'tpope/vim-fugitive'
 
 " Languages
-  Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-  Plug 'sheerun/vim-polyglot'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'hrsh7th/nvim-compe'
+  Plug 'mfussenegger/nvim-lint'
+
   Plug 'lervag/vimtex'
 
 call plug#end()
@@ -104,7 +106,39 @@ call plug#end()
   set wildmode=longest,list,full " Better command completion
   set wildignore+=*.png,*.PNG,*.JPG,*.jpg,*.JPEG,*.jpeg,*.GIF,*.gif,*.pdf,*.PDF " Binary files
   set wildignore+=.git,vendor,node_modules,reports,.idea " Project and vendor dirs
-  set completeopt=menu,preview
+  set completeopt=menuone,noselect
+
+  let g:compe = {}
+  let g:compe.enabled = v:true
+  let g:compe.autocomplete = v:true
+  let g:compe.debug = v:false
+  let g:compe.min_length = 1
+  let g:compe.preselect = 'enable'
+  let g:compe.throttle_time = 80
+  let g:compe.source_timeout = 200
+  let g:compe.resolve_timeout = 800
+  let g:compe.incomplete_delay = 400
+  let g:compe.max_abbr_width = 100
+  let g:compe.max_kind_width = 100
+  let g:compe.max_menu_width = 100
+  let g:compe.documentation = v:true
+
+  let g:compe.source = {}
+  let g:compe.source.path = v:true
+  let g:compe.source.buffer = v:true
+  let g:compe.source.calc = v:true
+  let g:compe.source.nvim_lsp = v:true
+  let g:compe.source.nvim_lua = v:true
+  let g:compe.source.vsnip = v:true
+  let g:compe.source.ultisnips = v:true
+  let g:compe.source.luasnip = v:true
+  let g:compe.source.emoji = v:true
+
+  inoremap <silent><expr> <C-Space> compe#complete()
+  inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+  inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+  inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+  inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
 " Make
   set autowrite " Save before :make
@@ -213,10 +247,124 @@ call plug#end()
 
 " Plugins {{{
 
-  " FZF
-    nmap <Leader><TAB> :Buffers<CR>
-    nmap <Leader><CR> :Files<CR>
-    nmap <Leader>/ :Rg<CR>
+  " Telescope  
+    nnoremap <Leader><TAB> <cmd>Telescope buffers<cr>
+    nnoremap <Leader><CR> <cmd>Telescope find_files<cr>
+    nnoremap <Leader>/ <cmd>Telescope live_grep<cr>
+    nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+  " nvim-lspconfig
+lua << EOF
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+local nvim_lsp = require('lspconfig')
+
+nvim_lsp.tsserver.setup{
+  -- disable formatting to use diagnosticls instead
+  on_attach = function(client)
+    client.resolved_capabilities.document_formatting = false
+    on_attach(client)
+  end,
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
+
+nvim_lsp.gopls.setup{
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
+
+nvim_lsp.intelephense.setup{
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
+
+nvim_lsp.diagnosticls.setup{
+  filetypes={'javascript','typescript'},
+  init_options = {
+    linters = {
+      eslint = {
+        command = 'eslint_d',
+        rootPatterns = {'.git'},
+        debounce = 100,
+        args = {
+          '--stdin',
+          '--stdin-filename',
+          '%filepath',
+          '--format',
+          'json'
+        },
+        sourceName = 'eslint',
+        parseJson = {
+          errorsRoot = '[0].messages',
+          line = 'line',
+          column = 'column',
+          endLine = 'endLine',
+          endColumn = 'endColumn',
+          message = '${message} [${ruleId}]',
+          security = 'severity'
+        },
+        securities = {
+          [2] = 'error',
+          [1] = 'warning',
+        },
+      },
+    },
+    filetypes = {
+      javascript = 'eslint',
+      typescript = 'eslint'
+    },
+    formatters = {
+      prettier = {
+        command = "prettier",
+        args = {"--stdin-filepath" ,"%filepath"}
+      },
+      eslint = {
+        command = "eslint_d",
+        args = {
+          '--fix-to-stdout',
+          '--stdin',
+          '--stdin-filename',
+          '%filepath',
+        },
+      }
+    },
+    formatFiletypes = {
+      javascript = "eslint",
+      typescript = "eslint"
+    },
+  }
+}
+EOF
+
+  " Format on save
+    au BufWritePre *.js,*.jsx,*.ts,*.tsx lua vim.lsp.buf.formatting()
 
   " Fugitive
     nnoremap <Leader>gs :Gstatus<CR>
@@ -224,23 +372,6 @@ call plug#end()
     nnoremap <Leader>gd :Gdiff<CR>
     nnoremap <Leader>gb :Gblame<CR>
     nnoremap <Leader>gf :Gfetch<CR>
-
-  " Javascript
-    let g:javascript_plugin_jsdoc = 1 " Enable syntax highlighting for docblocks
-
-  " JSX
-    let g:jsx_ext_required = 0
-
-  " PHP namespace
-    function! IPhpInsertUse()
-      call PhpInsertUse()
-      call feedkeys('a',  'n')
-    endfunction
-    autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-    autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR
-
-  " Markdown
-    let g:vim_markdown_folding_disabled = 1
 
   " Undo tree
     nmap <Leader>u :UndotreeToggle<CR>
@@ -266,115 +397,6 @@ call plug#end()
     let g:python_host_prog = '/usr/local/bin/python2'
     let g:python3_host_prog = '/usr/local/bin/python3'
 
-  " Golang
-    let g:go_highlight_build_constraints = 1
-    let g:go_highlight_extra_types = 1
-    let g:go_highlight_fields = 1
-    let g:go_highlight_function_calls = 1
-    let g:go_highlight_function_parameters = 1
-    let g:go_highlight_functions = 1
-    let g:go_highlight_operators = 1
-    let g:go_highlight_types = 1
-    let g:go_highlight_variable_assignments = 1
-    let g:go_highlight_variable_declarations = 1
-    let g:go_fmt_autosave = 0
-    let g:go_fmt_command = "goimports"
-    let g:go_metalinter_autosave = 0
-    let g:go_metalinter_command = 'golangci-lint'
-    let g:go_metalinter_autosave_enabled = []
-    let g:go_metalinter_enabled = []
-
-    autocmd FileType go nmap <Leader>b  <Plug>(go-build)
-    autocmd FileType go nmap <Leader>r  <Plug>(go-run)
-    autocmd FileType go nmap <Leader>t  <Plug>(go-test)
-    autocmd FileType go nmap <Leader>T  <Plug>(go-test-func)
-    autocmd FileType go nmap <Leader>d  <Plug>(go-def)
-    autocmd FileType go nmap <Leader>h  <Plug>(go-doc)
-    autocmd FileType go nmap <Leader>i  <Plug>(go-info)
-    autocmd FileType go nmap <Leader>a  <Plug>(go-alternate-edit)
-  
-  " ALE
-    let g:ale_linters = {
-    \   'javascript': ['eslint'],
-    \   'javascript.jsx': ['eslint'],
-    \   'typescript': ['tsserver', 'eslint'],
-    \   'go': ['golangci-lint']
-    \}
-    let g:ale_fixers = {
-    \  'javascript': ['eslint'],
-    \  'javascript.jsx': ['eslint'],
-    \  'typescript': ['eslint'],
-    \  'go': ['goimports']
-    \}
-    let g:ale_javascript_eslint_use_global = 1
-    let g:ale_javascript_eslint_executable = 'eslint_d'
-    let g:ale_fix_on_save = 1
-    let g:ale_go_golangci_lint_package = 1
-    nnoremap <Leader>F :ALEFix<CR>
-    nnoremap <Leader>l :ALENextWrap<CR>
-
-  " Coc
-
-    " Better display for messages
-    set cmdheight=2
-    " Smaller updatetime for CursorHold & CursorHoldI
-    set updatetime=300
-    " always show signcolumns
-    set signcolumn=yes
-
-    " Use tab for trigger completion with characters ahead and navigate.
-    " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    " Use <c-space> to trigger completion.
-    inoremap <silent><expr> <c-space> coc#refresh()
-
-    " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-    " Coc only does snippet and additional edit on confirm.
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-    " Remap keys for gotos
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gy <Plug>(coc-type-definition)
-    nmap <silent> gi <Plug>(coc-implementation)
-    nmap <silent> gr <Plug>(coc-references)
-
-    " Use K to show documentation in preview window
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-    function! s:show_documentation()
-      if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-      else
-        call CocAction('doHover')
-      endif
-    endfunction
-
-    " Highlight symbol under cursor on CursorHold
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-
-    " Remap for rename current word
-    nmap <Leader>rn <Plug>(coc-rename)
-
-    " coc-prettier - map :Prettier command
-    command! -nargs=0 Prettier :CocCommand prettier.formatFile
-    vmap <Leader>f <Plug>(coc-format-selected)
-    nmap <Leader>f :Prettier<CR>
-
-  " Lightline
-    function! CocCurrentFunction()
-        return get(b:, 'coc_current_function', '')
-    endfunction
-
     let g:lightline = {
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
@@ -385,5 +407,8 @@ call plug#end()
         \   'currentfunction': 'CocCurrentFunction'
         \ },
         \ }
+
+  " Vimtext
+    let g:tex_flavor = 'latex'
 
 " }}}

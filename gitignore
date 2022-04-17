@@ -1,14 +1,15 @@
-# Compiled Python files
-*.pyc
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Folder view configuration files
 .DS_Store
-Desktop.ini
 
-# Thumbnail cache files
-._*
-Thumbs.db
+# dependencies
+/node_modules
 
-# Files that might appear on external disks
-.Spotlight-V100
-.Trashes
+# testing
+/coverage
+
+/build
+
+.env
+
+.terraform

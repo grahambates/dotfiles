@@ -2,6 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH="./node_modules/.bin:../../node_modules/.bin:/usr/local/opt/ruby/bin:$HOME/go/bin:$HOME/.composer/vendor/bin:$HOME/Library/Python/3.7/bin:$PATH" 
 export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+export PATH="/Users/batesgw1/amiga/bin:$PATH"
 
 # Aspera client
 export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH
@@ -81,7 +82,7 @@ plugins=(
   history-substring-search
   npm
   nvm
-  osx
+  macos
   thefuck
   tmux
   vi-mode
@@ -125,6 +126,10 @@ alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
+
+# BBCW Digital
+alias sshu='sshuttle -r bastion 10.0.0.0/12 --dns --pidfile /tmp/sshuttle_digital.pid'
+alias ecsauth='aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 763459770974.dkr.ecr.eu-west-1.amazonaws.com'
 
 bindkey "\e[H" beginning-of-line
 bindkey "\e[F" end-of-line
