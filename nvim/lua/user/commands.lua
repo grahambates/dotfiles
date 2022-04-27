@@ -15,10 +15,19 @@ vim.cmd[[
   command! -bang Qa qa<bang>
 ]]
 
--- Default on for file types
+-- Default spelling on for file types
 vim.cmd[[
   autocmd BufRead,BufNewFile *.md setlocal spell
   autocmd FileType gitcommit setlocal spell
 ]]
 
-vim.cmd[[autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx lua vim.lsp.buf.formatting()]]
+vim.cmd[[
+  autocmd TermOpen * startinsert
+  autocmd BufWinEnter,WinEnter term://* startinsert
+  autocmd BufLeave term://* stopinsert
+  autocmd TermOpen * setlocal nonumber norelativenumber
+]]
+
+vim.cmd[[
+  command -nargs=* Make make <args>|Trouble quickfix
+]]

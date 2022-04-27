@@ -1,11 +1,4 @@
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-
+local lspconfig = require('lspconfig')
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -19,6 +12,16 @@ local on_attach = function(client, bufnr)
 
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Format on save
+  if client.resolved_capabilities.document_formatting then
+    vim.cmd[[
+      augroup lsp_document_format
+        autocmd! * <buffer>
+        autocmd BufWritePre  <buffer> lua vim.lsp.buf.formatting()
+      augroup END
+    ]]
+  end
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -40,13 +43,54 @@ end
 -- Update capabilities for cmp
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-local nvim_lsp = require('lspconfig')
+-- Initialise icons for LSP completions
+require('lspkind').init({
+  mode = 'symbol_text',
+})
+
+-- require("lspconfig.configs")["m68k"] = {
+--   default_config = {
+--     cmd = {'m68k-lsp-server', '--stdio'},
+--     filetypes = { "asm68k" },
+--     root_dir = lspconfig.util.root_pattern("Makefile", ".git"),
+--     init_options = {
+--       format = {
+--         align = {
+--           mnemonic = 20,
+--           operands = 30,
+--           comment = 45,
+--           indentStyle = "space"
+--         },
+--         case = {
+--           instruction = "lower",
+--           directive = "lower",
+--           control = "upper",
+--           register = "lower",
+--           sectionType = "lower",
+--         },
+--         quotes = "double"
+--       }
+--     }
+--   },
+-- }
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { 'intelephense', 'gopls' }
+local servers = {
+  'intelephense',
+  'gopls',
+  'terraformls',
+  'pyright',
+  'clangd',
+  'jsonls',
+  'html',
+  'cssls',
+  'dockerls',
+  'm68k',
+}
+
 for _, lsp in pairs(servers) do
-  nvim_lsp[lsp].setup {
+  lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
   }
@@ -54,12 +98,18 @@ end
 
 require("typescript").setup({
   disable_formatting = true, 
-  server = { -- pass options to lspconfig's setup method
+  server = {
     on_attach = on_attach,
     capabilities = capabilities,
+    init_options = {
+      preferences = {
+        disableSuggestions = true
+      }
+    }
   },
 })
 
+-- Stand-alone linters / formatters
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {

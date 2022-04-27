@@ -9,7 +9,7 @@ vim.cmd [[
 return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
 
-  use 'drewtempelmeyer/palenight.vim'
+  use 'Mofiqul/dracula.nvim'
   use 'editorconfig/editorconfig-vim'
   use 'junegunn/vim-easy-align' -- Align characters with ga
   use 'junegunn/vim-peekaboo' -- Register preview
@@ -17,8 +17,9 @@ return require('packer').startup(function()
   use 'machakann/vim-highlightedyank'
   use 'mbbill/undotree'
   use 'nelstrom/vim-visual-star-search'
-  use 'neovim/nvim-lspconfig'
+  use {'grahambates/nvim-lspconfig', branch = "add_m68k_config"}
   use 'nvim-treesitter/nvim-treesitter'
+  use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'tpope/vim-commentary'
   use 'tpope/vim-eunuch' -- Vim sugar for the UNIX shell commands e.g. Rename, Delete
   use 'tpope/vim-fugitive'
@@ -38,12 +39,17 @@ return require('packer').startup(function()
   }
 
   use {
-    'feline-nvim/feline.nvim',
+    'nvim-lualine/lualine.nvim',
     config = function()
-      require('feline').setup()
+      require('lualine').setup {
+        options = {
+          theme = 'dracula-nvim'
+        }
+      }
     end
   }
 
+  use 'onsails/lspkind-nvim'
   use 'L3MON4D3/LuaSnip'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
@@ -59,14 +65,6 @@ return require('packer').startup(function()
     "folke/which-key.nvim",
     config = function()
       require("which-key").setup()
-    end
-  }
-
-  use {
-    'phaazon/hop.nvim',
-    branch = 'v1',
-    config = function()
-      require('hop').setup()
     end
   }
 
@@ -97,4 +95,16 @@ return require('packer').startup(function()
       require("better_escape").setup()
     end,
   }
+
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup()
+    end
+  }
+
+  use 'p00f/nvim-ts-rainbow'
+
+  use "nvim-treesitter/playground"
 end)

@@ -12,7 +12,6 @@ opt.ignorecase = true -- caSe insensitive search
 opt.smartcase = true -- ...unless contains uppercase
 opt.gdefault = true -- use global flag by default in s: commands
 opt.undofile = true
-opt.directory = '$HOME/.vim/swapfiles//'
 opt.shortmess:append 'filmnrxcoOtT' -- Abbrev. of messages (avoids 'hit enter')
 opt.autowrite = true -- Save before :make
 opt.dictionary = '/usr/share/dict/words'
@@ -36,3 +35,9 @@ opt.inccommand = 'nosplit' -- Substitute preview
 opt.grepprg = "rg --hidden --glob '!.git' --vimgrep --with-filename"
 opt.grepformat = '%f:%l:%c:%m'
 opt.path = '.,**'
+
+vim.g.filetype_i = "asm68k"
+vim.g.asmsyntax = 'asm68k'
+vim.cmd[[
+set errorformat+=%E,%C%s\ %n\ in\ line\ %l\ of\ \"%f\":\ %m,%Z%s
+]]

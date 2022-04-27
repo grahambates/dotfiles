@@ -3,6 +3,7 @@
 export PATH="./node_modules/.bin:../../node_modules/.bin:/usr/local/opt/ruby/bin:$HOME/go/bin:$HOME/.composer/vendor/bin:$HOME/Library/Python/3.7/bin:$PATH" 
 export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 export PATH="/Users/batesgw1/amiga/bin:$PATH"
+export PATH="/Users/batesgw1/.cargo/bin:$PATH"
 
 # Aspera client
 export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH
@@ -148,3 +149,5 @@ export BAT_THEME="TwoDark"
 # Per the security update https://groups.google.com/forum/#!topic/golang-announce/X7N1mvntnoU you may need whitelist the
 # -Xpreprocessor flag in your environment.
 export CGO_CFLAGS_ALLOW='-Xpreprocessor'
+
+alias luamake=/Users/batesgw1/tools/lua-language-server/3rd/luamake/luamake

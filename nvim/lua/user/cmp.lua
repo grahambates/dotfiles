@@ -1,5 +1,5 @@
--- Setup nvim-cmp.
 local cmp = require('cmp')
+local lspkind = require('lspkind')
 
 cmp.setup({
   snippet = {
@@ -13,7 +13,7 @@ cmp.setup({
   },
   window = {
     -- completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -22,6 +22,11 @@ cmp.setup({
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol_text',
+    })
+  },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     -- { name = 'vsnip' }, -- For vsnip users.
