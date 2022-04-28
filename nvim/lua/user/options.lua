@@ -35,6 +35,7 @@ opt.inccommand = 'nosplit' -- Substitute preview
 opt.grepprg = "rg --hidden --glob '!.git' --vimgrep --with-filename"
 opt.grepformat = '%f:%l:%c:%m'
 opt.path = '.,**'
+opt.timeoutlen = 300
 
 vim.g.filetype_i = "asm68k"
 vim.g.asmsyntax = 'asm68k'
