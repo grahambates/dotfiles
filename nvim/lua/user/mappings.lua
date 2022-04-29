@@ -20,9 +20,6 @@ map('n', 'Q', '@@', opts)
 -- Delete without clobbering unnamed register
 map('n', 's', '"_d', opts)
 
--- Disable seldom used commands
-map('n', 'Q', '<nop>', opts)
-
 -- Center search match
 map('n', 'N', 'Nzz', opts)
 map('n', 'n', 'nzz', opts)
@@ -45,12 +42,25 @@ map("n", "<Esc>", "<cmd> :noh <CR>", {})
 
 require("which-key").register({
   -- Buffers
-  w = { '<cmd>w<cr>', "Buffer write" },
-  q = { '<cmd>bd<cr>', "Buffer close" },
-  Q = { '<cmd>bd<cr>', "Buffer close all" },
+  w = { '<cmd>w<cr>', "Write buffer" },
+  q = { '<cmd>bd<cr>', "Close buffer" },
+  Q = { '<cmd>q<cr>', "Quit" },
+  ["<tab>"] = { "<cmd>bprevious<cr>", "Previous buffer" },
+
+  b = {
+    name = "Buffer",
+    n = { '<cmd>enew<cr>', "New" },
+    w = { '<cmd>write<cr>', "Write" },
+    W = { '<cmd>wall<cr>', "Write all" },
+    s = { '<cmd>saveas', "Save as..." },
+    q = { '<cmd>bdelete<cr>', "Close" },
+    a = { '<cmd>ball<cr>', "Show all" },
+    l = { '<cmd>ls<cr>', "List" },
+    p = { '<cmd>ls<cr>', "Prev" },
+  },
 
   -- Find (Telescope)
-  ["<tab>"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+  ["§"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
   ["<cr>"] = { "<cmd>Telescope find_files<cr>", "Find files" },
   ["/"] = { "<cmd>Telescope live_grep<cr>", "Grep" },
 
