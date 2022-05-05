@@ -4,6 +4,7 @@ export PATH="./node_modules/.bin:../../node_modules/.bin:/usr/local/opt/ruby/bin
 export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 export PATH="/Users/batesgw1/amiga/bin:$PATH"
 export PATH="/Users/batesgw1/.cargo/bin:$PATH"
+export PATH="/opt/amiga/bin:$PATH"
 
 # Aspera client
 export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH

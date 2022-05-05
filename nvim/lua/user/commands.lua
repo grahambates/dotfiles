@@ -17,17 +17,29 @@ vim.cmd[[
 
 -- Default spelling on for file types
 vim.cmd[[
-  autocmd BufRead,BufNewFile *.md setlocal spell
-  autocmd FileType gitcommit setlocal spell
+  augroup enableSpelling
+    autocmd!
+    autocmd BufRead,BufNewFile *.md setlocal spell
+    autocmd FileType gitcommit setlocal spell
+  augroup end
 ]]
 
 vim.cmd[[
-  autocmd TermOpen * startinsert
-  autocmd BufWinEnter,WinEnter term://* startinsert
-  autocmd BufLeave term://* stopinsert
-  autocmd TermOpen * setlocal nonumber norelativenumber
+  augroup terminal
+    autocmd!
+    autocmd TermOpen * startinsert
+    autocmd BufWinEnter,WinEnter term://* startinsert
+    autocmd BufLeave term://* stopinsert
+    autocmd TermOpen * setlocal nonumber norelativenumber
+  augroup end
 ]]
 
 vim.cmd[[
   command -nargs=* Make make <args>|Trouble quickfix
+]]
+
+vim.cmd[[
+  augroup dap
+    au FileType dap-repl lua require('dap.ext.autocompl').attach()
+  augroup end
 ]]

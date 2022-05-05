@@ -40,12 +40,23 @@ map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 -- Clear search highight on escape
 map("n", "<Esc>", "<cmd> :noh <CR>", {})
 
+-- Indent stay in visual mode
+map("v", "<", "<gv", opts)
+map("v", ">", ">gv", opts)
+-- map("v", ".", ":normal .<cr>", opts)
+
+vim.cmd[[
+  nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
+  nnoremap <silent> <F10> <Cmd>lua require'dap'.step_over()<CR>
+  nnoremap <silent> <F11> <Cmd>lua require'dap'.step_into()<CR>
+  nnoremap <silent> <F12> <Cmd>lua require'dap'.step_out()<CR>
+]]
+
 require("which-key").register({
   -- Buffers
   w = { '<cmd>w<cr>', "Write buffer" },
   q = { '<cmd>bd<cr>', "Close buffer" },
   Q = { '<cmd>q<cr>', "Quit" },
-  ["<tab>"] = { "<cmd>bprevious<cr>", "Previous buffer" },
 
   b = {
     name = "Buffer",
@@ -60,7 +71,7 @@ require("which-key").register({
   },
 
   -- Find (Telescope)
-  ["§"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+  ["<tab>"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
   ["<cr>"] = { "<cmd>Telescope find_files<cr>", "Find files" },
   ["/"] = { "<cmd>Telescope live_grep<cr>", "Grep" },
 
@@ -129,5 +140,23 @@ require("which-key").register({
   j = { 'J"_x', "Join" },
   ["?"] = { '<cmd>set spell!<cr>', "Spelling toggle" },
   m = { '<cmd>Make<cr>', "Make" },
+
+  d = {
+    name = "Debug",
+    b = { '<cmd> lua require"dap".toggle_breakpoint() <cr>', 'Toggle breakpoint' },
+    B = { '<cmd> lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: ")) <cr>', 'Set breakpoint condition' },
+    C = { '<cmd> lua require"dap".clear_breakpoints() <cr>', 'Clear breakpoints' },
+    ['?'] = { '<cmd> lua require"dap".list_breakpoints() <cr>', 'List breakpoints' },
+    c = { '<cmd> lua require"dap".continue() <cr>', 'Continue' },
+    o = { '<cmd> lua require"dap".step_over() <cr>', 'Step over' },
+    O = { '<cmd> lua require"dap".step_out() <cr>', 'Step out' },
+    i = { '<cmd> lua require"dap".step_into() <cr>', 'Step into' },
+    r = { '<cmd> lua require"dap".repl.toggle() <cr>', 'Repl' },
+    l = { '<cmd> lua require"dap".run_last() <cr>', 'Run last' },
+    L = { '<cmd> lua require"dap".set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) <cr>', 'Log point' },
+    t = { '<cmd> lua require"dap".terminate() <cr>', 'Terminate' },
+    p = { '<cmd> lua require"dap".pause() <cr>', 'Pause' },
+    R = { '<cmd> lua require"dap".run_to_cursor() <cr>', 'Run to cursor' },
+  }
 
 }, { prefix = "<leader>" })

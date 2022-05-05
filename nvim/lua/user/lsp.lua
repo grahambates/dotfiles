@@ -100,7 +100,7 @@ local servers = {
   'html',
   'cssls',
   'dockerls',
-  'm68k',
+  -- 'm68k',
 }
 
 for _, lsp in pairs(servers) do
@@ -109,6 +109,17 @@ for _, lsp in pairs(servers) do
     capabilities = capabilities,
   }
 end
+
+lspconfig.m68k.setup {
+  cmd = {'/Users/batesgw1/m68k-lsp/server/debug.js', '--stdio'},
+  trace = 'verbose',
+  init_options = {
+    trace = 'verbose',
+  },
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+vim.lsp.set_log_level("debug")
 
 require("typescript").setup({
   disable_formatting = true, 
