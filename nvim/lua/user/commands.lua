@@ -40,6 +40,10 @@ vim.cmd[[
 
 vim.cmd[[
   augroup dap
-    au FileType dap-repl lua require('dap.ext.autocompl').attach()
+    autocmd!
+    autocmd FileType dap-repl lua require('dap.ext.autocompl').attach()
+    autocmd FileType dap-repl setlocal nonumber norelativenumber
+    autocmd BufWinEnter,WinEnter \[dap-repl\]* startinsert
+    autocmd BufLeave \[dap-repl\]* stopinsert
   augroup end
 ]]

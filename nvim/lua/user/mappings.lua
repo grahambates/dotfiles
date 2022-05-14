@@ -13,6 +13,11 @@ map("n", "<C-j>", "<C-w>j", opts)
 map("n", "<C-k>", "<C-w>k", opts) -- conflict?
 map("n", "<C-l>", "<C-w>l", opts)
 
+map("i", "<C-h>", "<C-w>h", opts)
+map("i", "<C-j>", "<C-w>j", opts)
+map("i", "<C-k>", "<C-w>k", opts)
+map("i", "<C-l>", "<C-w>l", opts)
+
 -- More convenient mappings for standard commands
 map('n', 'H', '^', opts)
 map('n', 'Q', '@@', opts)
@@ -52,6 +57,12 @@ vim.cmd[[
   nnoremap <silent> <F12> <Cmd>lua require'dap'.step_out()<CR>
 ]]
 
+widgets = require('dap.ui.widgets')
+scopes_sidebar = widgets.sidebar(widgets.scopes)
+frames_sidebar = widgets.sidebar(widgets.frames)
+expression_sidebar = widgets.sidebar(widgets.expression)
+threads_sidebar = widgets.sidebar(widgets.threads)
+
 require("which-key").register({
   -- Buffers
   w = { '<cmd>w<cr>', "Write buffer" },
@@ -60,18 +71,23 @@ require("which-key").register({
 
   b = {
     name = "Buffer",
-    n = { '<cmd>enew<cr>', "New" },
+    e = { '<cmd>enew<cr>', "New" },
     w = { '<cmd>write<cr>', "Write" },
     W = { '<cmd>wall<cr>', "Write all" },
     s = { '<cmd>saveas', "Save as..." },
     q = { '<cmd>bdelete<cr>', "Close" },
     a = { '<cmd>ball<cr>', "Show all" },
-    l = { '<cmd>ls<cr>', "List" },
-    p = { '<cmd>ls<cr>', "Prev" },
+    ["?"] = { '<cmd>ls<cr>', "List" },
+    f = { '<cmd>bfirst<cr>', "First" },
+    l = { '<cmd>blast<cr>', "Last" },
+    n = { '<cmd>bnext<cr>', "Next" },
+    p = { '<cmd>bprevious<cr>', "Previous" },
+    a = { '<cmd>b#<cr>', "Alternate" },
   },
 
   -- Find (Telescope)
-  ["<tab>"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+  ["<tab>"] = { "<cmd>b#<cr>", "Alternate buffer" },
+  ["\\"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
   ["<cr>"] = { "<cmd>Telescope find_files<cr>", "Find files" },
   ["/"] = { "<cmd>Telescope live_grep<cr>", "Grep" },
 
@@ -157,6 +173,14 @@ require("which-key").register({
     t = { '<cmd> lua require"dap".terminate() <cr>', 'Terminate' },
     p = { '<cmd> lua require"dap".pause() <cr>', 'Pause' },
     R = { '<cmd> lua require"dap".run_to_cursor() <cr>', 'Run to cursor' },
+    k = { '<cmd> lua widgets.hover() <cr>', 'Hover' },
+    w = {
+      name = 'Widgets',
+      s = { '<cmd> lua scopes_sidebar.toggle() <cr>', 'Scopes' },
+      f = { '<cmd> lua frames_sidebar.toggle() <cr>', 'Frames' },
+      e = { '<cmd> lua expression_sidebar.toggle() <cr>', 'Expression' },
+      t = { '<cmd> lua threads_sidebar.toggle() <cr>', 'Threads' },
+    }
   }
 
 }, { prefix = "<leader>" })

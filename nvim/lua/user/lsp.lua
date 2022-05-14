@@ -1,9 +1,26 @@
 local lspconfig = require('lspconfig')
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = {
+  'tsserver',
+  'intelephense',
+  'gopls',
+  'terraformls',
+  'pyright',
+  'clangd',
+  'jsonls',
+  'html',
+  'cssls',
+  'dockerls',
+  -- 'm68k',
+}
+ 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  -- Disable default formatting for tssever
-  if client.name == "tsserver" then
+  -- Disable default formatting for languages handled by null-ls
+  if client.name == "tsserver" or client.name == "jsonls" or client.name == "html" or client.name == "cssls" then
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
   end
@@ -18,7 +35,7 @@ local on_attach = function(client, bufnr)
     vim.cmd[[
       augroup lsp_document_format
         autocmd! * <buffer>
-        autocmd BufWritePre  <buffer> lua vim.lsp.buf.formatting()
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
       augroup END
     ]]
   end
@@ -40,7 +57,7 @@ local on_attach = function(client, bufnr)
       -- gr = { "<cmd>Telescope lsp_references<cr>", "Find references (Telescope)", buffer = bufnr, noremap = true },
       -- gR = { "<cmd>Trouble lsp_references<cr>", "Find references (Trouble)", buffer = bufnr, noremap = true },
     },
-  })
+  }, { prefix = "<leader>" })
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -62,47 +79,6 @@ require('lspkind').init({
   mode = 'symbol_text',
 })
 
--- require("lspconfig.configs")["m68k"] = {
---   default_config = {
---     cmd = {'m68k-lsp-server', '--stdio'},
---     filetypes = { "asm68k" },
---     root_dir = lspconfig.util.root_pattern("Makefile", ".git"),
---     init_options = {
---       format = {
---         align = {
---           mnemonic = 20,
---           operands = 30,
---           comment = 45,
---           indentStyle = "space"
---         },
---         case = {
---           instruction = "lower",
---           directive = "lower",
---           control = "upper",
---           register = "lower",
---           sectionType = "lower",
---         },
---         quotes = "double"
---       }
---     }
---   },
--- }
-
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = {
-  'intelephense',
-  'gopls',
-  'terraformls',
-  'pyright',
-  'clangd',
-  'jsonls',
-  'html',
-  'cssls',
-  'dockerls',
-  -- 'm68k',
-}
-
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
@@ -111,7 +87,7 @@ for _, lsp in pairs(servers) do
 end
 
 lspconfig.m68k.setup {
-  cmd = {'/Users/batesgw1/m68k-lsp/server/debug.js', '--stdio'},
+  cmd = {'node', '--inspect', '/Users/batesgw1/m68k-lsp/server/cli.js', '--stdio'},
   trace = 'verbose',
   init_options = {
     trace = 'verbose',
@@ -119,27 +95,16 @@ lspconfig.m68k.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
-vim.lsp.set_log_level("debug")
-
-require("typescript").setup({
-  disable_formatting = true, 
-  server = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    init_options = {
-      preferences = {
-        disableSuggestions = true
-      }
-    }
-  },
-})
+vim.lsp.set_log_level("trace")
 
 -- Stand-alone linters / formatters
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.code_actions.eslint_d,
+    -- null_ls.builtins.diagnostics.eslint_d,
+    -- null_ls.builtins.code_actions.eslint_d,
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.code_actions.eslint,
     null_ls.builtins.formatting.prettierd
   },
   on_attach = on_attach
