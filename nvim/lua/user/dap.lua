@@ -51,6 +51,9 @@ dap.configurations.typescript = {
 
 local home = os.getenv('HOME')
 
+-- dap.defaults.fallback.focus_terminal = true
+-- dap.defaults.fallback.auto_continue_if_many_stopped = false
+
 dap.adapters.asm68k = {
   type = 'executable',
   command = home .. '/uae-dap/cli.js',
@@ -68,19 +71,17 @@ dap.configurations.asm68k = {
     cwd = '${workspaceFolder}',
     -- custom settings:
     stopOnEntry = false,
-    serverName = "localhost",
-    serverPort = 6860,
-    trace = false,
-    startEmulator = true,
+    trace = true,
     emulator = home .. "/amiga/bin/fs-uae",
     emulatorWorkingDir = home .."/amiga/bin",
     emulatorOptions = {
       "--hard_drive_0=${workspaceFolder}/uae/dh0",
       "--remote_debugger=200",
       "--use_remote_debugger=true",
-      "--automatic_input_grab=0"
+      "--automatic_input_grab=0",
+      "--warp_mode=1"
     },
   }
 }
 
--- dap.set_log_level('DEBUG')
+dap.set_log_level('DEBUG')

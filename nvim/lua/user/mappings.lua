@@ -10,7 +10,7 @@ opts = { noremap = true, silent = true }
 -- Better window navigation
 map("n", "<C-h>", "<C-w>h", opts)
 map("n", "<C-j>", "<C-w>j", opts)
-map("n", "<C-k>", "<C-w>k", opts) -- conflict?
+map("n", "<C-k>", "<C-w>k", opts) 
 map("n", "<C-l>", "<C-w>l", opts)
 
 map("i", "<C-h>", "<C-w>h", opts)
@@ -18,25 +18,33 @@ map("i", "<C-j>", "<C-w>j", opts)
 map("i", "<C-k>", "<C-w>k", opts)
 map("i", "<C-l>", "<C-w>l", opts)
 
+map('t', '<C-h>', '<C-\\><C-N><C-w>h', opts)
+map('t', '<C-j>', '<C-\\><C-N><C-w>j', opts)
+map('t', '<C-k>', '<C-\\><C-N><C-w>k', opts)
+map('t', '<C-l>', '<C-\\><C-N><C-w>l', opts)
+
 -- More convenient mappings for standard commands
 map('n', 'H', '^', opts)
 map('n', 'Q', '@@', opts)
 
 -- Delete without clobbering unnamed register
 map('n', 's', '"_d', opts)
+map('n', 'ss', '"_dd', opts)
 
 -- Center search match
 map('n', 'N', 'Nzz', opts)
 map('n', 'n', 'nzz', opts)
 
+-- Very magic search by default
+map('n', '/', '/\\v', { noremap = true })
+map('n', '?', '?\\v', { noremap = true })
+
+-- Reverse star search
+map('n', '&', '*?<cr>n', opts)
+
 -- Terminal:
 -- ctrl-n for normal mode - need esc key for zsh vim mode
 map('t', '<C-n>', '<C-\\><C-n>', opts)
--- -- Window movements
-map('t', '<C-h>', '<C-\\><C-N><C-w>h', opts)
-map('t', '<C-j>', '<C-\\><C-N><C-w>j', opts)
-map('t', '<C-k>', '<C-\\><C-N><C-w>k', opts)
-map('t', '<C-l>', '<C-\\><C-N><C-w>l', opts)
 
 -- Diagnostics
 map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
@@ -46,22 +54,45 @@ map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 map("n", "<Esc>", "<cmd> :noh <CR>", {})
 
 -- Indent stay in visual mode
-map("v", "<", "<gv", opts)
-map("v", ">", ">gv", opts)
+-- map("v", "<", "<gv", opts)
+-- map("v", ">", ">gv", opts)
 -- map("v", ".", ":normal .<cr>", opts)
 
-vim.cmd[[
-  nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
-  nnoremap <silent> <F10> <Cmd>lua require'dap'.step_over()<CR>
-  nnoremap <silent> <F11> <Cmd>lua require'dap'.step_into()<CR>
-  nnoremap <silent> <F12> <Cmd>lua require'dap'.step_out()<CR>
-]]
+-- Debugger:
 
 widgets = require('dap.ui.widgets')
 scopes_sidebar = widgets.sidebar(widgets.scopes)
 frames_sidebar = widgets.sidebar(widgets.frames)
 expression_sidebar = widgets.sidebar(widgets.expression)
 threads_sidebar = widgets.sidebar(widgets.threads)
+
+map('n', '<F5>', '<cmd>lua dap.continue()<CR>', opts)
+map('i', '<F5>', '<cmd>lua dap.continue()<CR>', opts)
+map('n', '<F9>', '<cmd>lua dap.toggle_breakpoint()<CR>', opts)
+map('i', '<F9>', '<cmd>lua dap.toggle_breakpoint()<CR>', opts)
+map('n', '<F10>', '<cmd>lua dap.step_over()<CR>', opts)
+map('i', '<F10>', '<cmd>lua dap.step_over()<CR>', opts)
+map('n', '<F11>', '<cmd>lua dap.step_into()<CR>', opts)
+map('i', '<F11>', '<cmd>lua dap.step_into()<CR>', opts)
+map('n', '<F12>', '<cmd>lua dap.step_out()<CR>', opts)
+map('i', '<F12>', '<cmd>lua dap.step_out()<CR>', opts)
+
+dap = require("dap")
+
+function start_debug()
+  dap.continue()
+  scopes_sidebar.open()
+  dap.repl.open({ height = 20 })
+end
+
+function stop_debug()
+  dap.terminate()
+  scopes_sidebar.close()
+  frames_sidebar.close()
+  expression_sidebar.close()
+  threads_sidebar.close()
+  dap.repl.close()
+end
 
 require("which-key").register({
   -- Buffers
@@ -100,6 +131,8 @@ require("which-key").register({
     r = { "<cmd>Telescope registers<cr>", "Registers" },
     b = { "<cmd>Telescope buffers<cr>", "Buffers" },
     g = { "<cmd>Telescope live_grep<cr>", "Grep" },
+    s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols" },
+    S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace symbols" },
   },
 
   -- Git (Fugitive)
@@ -159,6 +192,8 @@ require("which-key").register({
 
   d = {
     name = "Debug",
+    d = { '<cmd> lua start_debug() <cr>', 'Start' },
+    x = { '<cmd> lua stop_debug() <cr>', 'Stop' },
     b = { '<cmd> lua require"dap".toggle_breakpoint() <cr>', 'Toggle breakpoint' },
     B = { '<cmd> lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: ")) <cr>', 'Set breakpoint condition' },
     C = { '<cmd> lua require"dap".clear_breakpoints() <cr>', 'Clear breakpoints' },
