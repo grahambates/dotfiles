@@ -114,6 +114,8 @@ require("which-key").register({
     n = { '<cmd>bnext<cr>', "Next" },
     p = { '<cmd>bprevious<cr>', "Previous" },
     a = { '<cmd>b#<cr>', "Alternate" },
+    t = { '<cmd>sp|term<cr><cmd>resize 15<cr>', "Terminal split" },
+    T = { '<cmd>vsp|term<cr>', "Terminal vertical split" },
   },
 
   -- Find (Telescope)
