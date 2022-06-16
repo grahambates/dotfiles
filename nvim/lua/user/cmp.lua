@@ -2,6 +2,8 @@ local cmp = require('cmp')
 local lspkind = require('lspkind')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
+require("luasnip.loaders.from_vscode").lazy_load()
+
 cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine

@@ -6,6 +6,7 @@ export PATH="/Users/batesgw1/amiga/bin:$PATH"
 export PATH="/Users/batesgw1/.cargo/bin:$PATH"
 export PATH="/opt/amiga/bin:$PATH"
 export PATH="/Users/batesgw1/amiga/toolchain/bin:$PATH"
+export PATH="/Users/batesgw1/homebrew/bin:$PATH"
 
 # Aspera client
 export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH
@@ -15,6 +16,10 @@ export MANPATH=/Users/batesgw1/Applications/Aspera\ CLI/share/man:$MANPATH
 export ZSH="/Users/batesgw1/.oh-my-zsh"
 
 export ZSH_DISABLE_COMPFIX=true
+
+# Include paths
+export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -86,13 +91,11 @@ plugins=(
   npm
   nvm
   macos
-  thefuck
   tmux
   vi-mode
   fzf
   yarn
   z
-  zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -153,3 +156,7 @@ export BAT_THEME="TwoDark"
 export CGO_CFLAGS_ALLOW='-Xpreprocessor'
 
 alias luamake=/Users/batesgw1/tools/lua-language-server/3rd/luamake/luamake
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

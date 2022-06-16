@@ -70,8 +70,8 @@ dap.configurations.asm68k = {
     program = '${workspaceFolder}/uae/dh0/gencop',
     cwd = '${workspaceFolder}',
     -- custom settings:
-    stopOnEntry = false,
-    trace = true,
+    stopOnEntry = true,
+    trace = false,
     emulator = home .. "/amiga/bin/fs-uae",
     emulatorWorkingDir = home .."/amiga/bin",
     emulatorOptions = {

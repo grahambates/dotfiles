@@ -34,6 +34,7 @@ return require('packer').startup(function()
   use 'jose-elias-alvarez/null-ls.nvim'
   use 'jose-elias-alvarez/typescript.nvim'
   use 'ray-x/lsp_signature.nvim'
+  use 'simrat39/symbols-outline.nvim'
 
   -- Tree Sitter
   use 'nvim-treesitter/nvim-treesitter'
@@ -70,7 +71,9 @@ return require('packer').startup(function()
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
+  use "rafamadriz/friendly-snippets"
   use 'L3MON4D3/LuaSnip'
+  use 'saadparwaiz1/cmp_luasnip'
 
   use {
     "folke/which-key.nvim",

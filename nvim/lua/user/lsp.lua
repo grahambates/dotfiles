@@ -20,7 +20,7 @@ local servers = {
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- Disable default formatting for languages handled by null-ls
-  if client.name == "jsonls" or client.name == "html" or client.name == "cssls" then
+  if client.name == "jsonls" or client.name == "html" or client.name == "cssls" or client.name == "tsserver" then
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
   end
@@ -53,6 +53,7 @@ local on_attach = function(client, bufnr)
       s = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace symbols", buffer = bufnr, noremap = true },
       r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename", buffer = bufnr, noremap = true },
       a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action", buffer = bufnr, noremap = true },
+      o = { "<cmd>SymbolsOutline<cr>", "Outline", buffer = bufnr, noremap = true },
       w = {
         name = "Workspace",
         a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Add folder", buffer = bufnr, noremap = true },
