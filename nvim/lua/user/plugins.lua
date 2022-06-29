@@ -29,7 +29,7 @@ return require('packer').startup(function()
   use 'easymotion/vim-easymotion'
 
   -- Language Server Protocol
-  use {'grahambates/nvim-lspconfig', branch = "add_m68k_config"}
+  use 'neovim/nvim-lspconfig'
   use 'onsails/lspkind-nvim'
   use 'jose-elias-alvarez/null-ls.nvim'
   use 'jose-elias-alvarez/typescript.nvim'

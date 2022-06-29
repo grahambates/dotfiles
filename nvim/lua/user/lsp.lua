@@ -97,11 +97,17 @@ for _, lsp in pairs(servers) do
 end
 
 lspconfig.m68k.setup {
-  cmd = {'node', '--inspect', '/Users/batesgw1/m68k-lsp/server/cli.js', '--stdio'},
+  -- cmd = {'node', '--inspect', '/Users/batesgw1/m68k-lsp/server/cli.js', '--stdio'},
   -- trace = 'verbose',
-  -- init_options = {
-  --   trace = 'verbose',
-  -- },
+  init_options = {
+    trace = 'verbose',
+    includePaths = { '../include', '/home/myuser/includes' },
+    format = {
+      case = {
+        instruction = 'upper'
+      }
+    }
+  },
   on_attach = on_attach,
   capabilities = capabilities,
 }

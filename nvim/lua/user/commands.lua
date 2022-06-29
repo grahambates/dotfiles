@@ -47,3 +47,10 @@ vim.cmd[[
     autocmd BufLeave \[dap-repl\]* stopinsert
   augroup end
 ]]
+
+vim.cmd[[
+  augroup asm68k
+  autocmd!
+  autocmd FileType asm68k setlocal commentstring=;\ %s
+  augroup end
+]]
