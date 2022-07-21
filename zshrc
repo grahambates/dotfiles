@@ -18,8 +18,8 @@ export ZSH="/Users/batesgw1/.oh-my-zsh"
 export ZSH_DISABLE_COMPFIX=true
 
 # Include paths
-export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
-export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+# export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+# export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
