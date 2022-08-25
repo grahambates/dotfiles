@@ -31,7 +31,8 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Format on save
-  if client.resolved_capabilities.document_formatting then
+  -- if client.resolved_capabilities.document_formatting then
+  if client.name == "tsserver" then
     vim.cmd[[
       augroup lsp_document_format
         autocmd! * <buffer>
@@ -97,7 +98,6 @@ for _, lsp in pairs(servers) do
 end
 
 lspconfig.m68k.setup {
-  -- cmd = {'node', '--inspect', '/Users/batesgw1/m68k-lsp/server/cli.js', '--stdio'},
   -- trace = 'verbose',
   init_options = {
     trace = 'verbose',

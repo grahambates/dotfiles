@@ -8,6 +8,9 @@ export PATH="/opt/amiga/bin:$PATH"
 export PATH="/Users/batesgw1/amiga/toolchain/bin:$PATH"
 export PATH="/Users/batesgw1/homebrew/bin:$PATH"
 
+export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+
 # Aspera client
 export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH
 export MANPATH=/Users/batesgw1/Applications/Aspera\ CLI/share/man:$MANPATH
