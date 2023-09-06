@@ -2,11 +2,13 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH="./node_modules/.bin:../../node_modules/.bin:/usr/local/opt/ruby/bin:$HOME/go/bin:$HOME/.composer/vendor/bin:$HOME/Library/Python/3.7/bin:$PATH" 
 export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-export PATH="/Users/batesgw1/amiga/bin:$PATH"
 export PATH="/Users/batesgw1/.cargo/bin:$PATH"
-export PATH="/opt/amiga/bin:$PATH"
-export PATH="/Users/batesgw1/amiga/toolchain/bin:$PATH"
 export PATH="/Users/batesgw1/homebrew/bin:$PATH"
+export PATH="/Users/batesgw1/Library/Android/sdk/platform-tools:$PATH"
+# export PATH="/Users/batesgw1/amiga/bin:$PATH"
+export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin:$PATH"
+export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin/opt/bin:$PATH"
+
 
 export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
 export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
@@ -163,3 +165,5 @@ alias luamake=/Users/batesgw1/tools/lua-language-server/3rd/luamake/luamake
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export PATH="/usr/local/opt/php@7.4/bin:$PATH"
+# export PATH="/usr/local/opt/php@7.4/sbin:$PATH"

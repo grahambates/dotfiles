@@ -7,12 +7,6 @@ vim.cmd [[
 ]]
 
 packer = require 'packer'
--- packer.init {
---   profile = {
---     enable = true,
---     threshold = 1 -- the amount in ms that a plugins load time must be over for it to be included in the profile
---   }
--- }
 
 return packer.startup(function()
   use 'wbthomason/packer.nvim'
@@ -75,6 +69,7 @@ return packer.startup(function()
 
   -- CMP completions
   use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-nvim-lua'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
@@ -134,5 +129,22 @@ return packer.startup(function()
   use 'p00f/nvim-ts-rainbow'
 
   -- Debug adapter protocol
-  use 'mfussenegger/nvim-dap'
+  use {
+    "rcarriga/nvim-dap-ui",
+    requires = {"mfussenegger/nvim-dap"},
+    config = function()
+      require("dapui").setup()
+    end
+  }
+  -- use 'mfussenegger/nvim-dap'
+
+  use({
+    "grahambates/68kcounter-nvim",
+    config = function()
+      require("68kcounter").setup({
+        -- path to 68kcounter node cli tool (default assumes global path)
+        bin_path="68kcounter"
+      })
+    end,
+  })
 end)

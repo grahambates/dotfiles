@@ -78,20 +78,16 @@ map('n', '<F12>', '<cmd>lua dap.step_out()<CR>', opts)
 map('i', '<F12>', '<cmd>lua dap.step_out()<CR>', opts)
 
 dap = require("dap")
+dapui = require("dapui")
 
 function start_debug()
   dap.continue()
-  scopes_sidebar.open()
-  dap.repl.open({ height = 20 })
+  dapui.open()
 end
 
 function stop_debug()
   dap.terminate()
-  scopes_sidebar.close()
-  frames_sidebar.close()
-  expression_sidebar.close()
-  threads_sidebar.close()
-  dap.repl.close()
+  dapui.close()
 end
 
 require("which-key").register({
@@ -123,6 +119,8 @@ require("which-key").register({
   ["\\"] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
   ["<cr>"] = { "<cmd>Telescope find_files<cr>", "Find files" },
   ["/"] = { "<cmd>Telescope live_grep<cr>", "Grep" },
+  ["<space>"] = { "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols" },
+  ["'"] = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace symbols" },
 
   f = {
     name = "Find",
@@ -187,7 +185,7 @@ require("which-key").register({
   },
 
   -- Misc
-  u = { "<cmd>UndotreeToggle", "Undotree" },
+  u = { "<cmd>UndotreeToggle<cr>", "Undotree" },
   j = { 'J"_x', "Join" },
   ["?"] = { '<cmd>set spell!<cr>', "Spelling toggle" },
   m = { '<cmd>Make<cr>', "Make" },
@@ -196,7 +194,9 @@ require("which-key").register({
     name = "Debug",
     d = { '<cmd> lua start_debug() <cr>', 'Start' },
     x = { '<cmd> lua stop_debug() <cr>', 'Stop' },
+    u = { '<cmd> lua require"dapui".toggle() <cr>', 'Toggle UI' },
     b = { '<cmd> lua require"dap".toggle_breakpoint() <cr>', 'Toggle breakpoint' },
+    e = { '<cmd> lua require"dap".set_exception_breakpoints() <cr>', 'Exception breakpoint' },
     B = { '<cmd> lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: ")) <cr>', 'Set breakpoint condition' },
     C = { '<cmd> lua require"dap".clear_breakpoints() <cr>', 'Clear breakpoints' },
     ['?'] = { '<cmd> lua require"dap".list_breakpoints() <cr>', 'List breakpoints' },
@@ -210,7 +210,10 @@ require("which-key").register({
     t = { '<cmd> lua require"dap".terminate() <cr>', 'Terminate' },
     p = { '<cmd> lua require"dap".pause() <cr>', 'Pause' },
     R = { '<cmd> lua require"dap".run_to_cursor() <cr>', 'Run to cursor' },
-    k = { '<cmd> lua widgets.hover() <cr>', 'Hover' },
+    -- k = { '<cmd> lua widgets.hover() <cr>', 'Hover' },
+    k = { '<cmd> lua require"dapui".eval() <cr>', 'Hover' },
+    u = { '<cmd> lua require"dap".up() <cr>', 'Move up stack' },
+    D = { '<cmd> lua require"dap".down() <cr>', 'Move down stack' },
     w = {
       name = 'Widgets',
       s = { '<cmd> lua scopes_sidebar.toggle() <cr>', 'Scopes' },

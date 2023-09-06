@@ -54,3 +54,9 @@ vim.cmd[[
   autocmd FileType asm68k setlocal commentstring=;\ %s
   augroup end
 ]]
+
+-- Whitespace per file type
+vim.cmd[[
+  autocmd FileType cpp setlocal ts=4 sw=4 sts=0 noexpandtab
+  autocmd FileType c setlocal ts=4 sw=4 sts=0 noexpandtab
+]]

@@ -3,7 +3,7 @@ local lspconfig = require('lspconfig')
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 local servers = {
-  -- 'tsserver',
+  'tsserver',
   'intelephense',
   'gopls',
   'terraformls',
@@ -15,14 +15,14 @@ local servers = {
   'dockerls',
   -- 'm68k',
 }
- 
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- Disable default formatting for languages handled by null-ls
   if client.name == "jsonls" or client.name == "html" or client.name == "cssls" or client.name == "tsserver" then
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
+    client.server_capabilities.document_formatting = false
+    client.server_capabilities.document_range_formatting = false
   end
 
   require "lsp_signature".on_attach()
@@ -32,11 +32,11 @@ local on_attach = function(client, bufnr)
 
   -- Format on save
   -- if client.resolved_capabilities.document_formatting then
-  if client.name == "tsserver" then
+  if client.name == "tsserver" or  client.name == "m68k" then
     vim.cmd[[
       augroup lsp_document_format
         autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
       augroup END
     ]]
   end
@@ -83,7 +83,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Update capabilities for cmp
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Initialise icons for LSP completions
 require('lspkind').init({
@@ -97,20 +97,104 @@ for _, lsp in pairs(servers) do
   }
 end
 
+local home = os.getenv('HOME')
+
 lspconfig.m68k.setup {
-  -- trace = 'verbose',
+  -- cmd = { "m68k-lsp-server", "--stdio" },
+  cmd = { "/Users/batesgw1/projects/m68k-lsp/server/cli.js", "--stdio" },
+  trace = 'verbose',
   init_options = {
-    trace = 'verbose',
-    includePaths = { '../include', '/home/myuser/includes' },
+    -- trace = 'verbose',
+    includePaths = { '../include', '..' },
     format = {
       case = {
-        instruction = 'upper'
+        instruction = 'lower'
       }
     }
   },
   on_attach = on_attach,
   capabilities = capabilities,
 }
+
+lspconfig.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        disable = {
+          'lowercase-global'
+        },
+        globals = {
+          'vim',
+          'use',
+          'require',
+          -- TIC-80
+          'btn',
+          'btnp',
+          'circ',
+          'circb',
+          'clip',
+          'cls',
+          'elli',
+          'ellib',
+          'exit',
+          'fget',
+          'font',
+          'fset',
+          'key',
+          'keyp',
+          'line',
+          'map',
+          'memcpy',
+          'memset',
+          'mget',
+          'mouse',
+          'mset',
+          'music',
+          'peek',
+          'peek1',
+          'peek2',
+          'peek4',
+          'pix',
+          'pmem',
+          'poke',
+          'poke1',
+          'poke2',
+          'poke4',
+          'print',
+          'rect',
+          'rectb',
+          'reset',
+          'sfx',
+          'spr',
+          'sync',
+          'time',
+          'trace',
+          'tri',
+          'trib',
+          'ttri',
+          'vbank'
+        },
+      },
+      workspace = {
+        checkThirdParty = false,
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+}
+
+
 -- vim.lsp.set_log_level("trace")
 
 -- Stand-alone linters / formatters
@@ -121,6 +205,7 @@ null_ls.setup({
     -- null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.code_actions.eslint,
+    -- null_ls.builtins.code_actions.eslint,
     null_ls.builtins.formatting.prettierd
   },
   on_attach = on_attach

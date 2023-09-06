@@ -1,4 +1,5 @@
 local dap = require('dap')
+local dapui = require('dapui')
 
 dap.adapters.node2 = {
   type = 'executable',
@@ -56,31 +57,30 @@ local home = os.getenv('HOME')
 
 dap.adapters.asm68k = {
   type = 'executable',
-  command = home .. '/uae-dap/cli.js',
-  -- command = 'node',
-  -- args = { '--inspect', home .. '/uae-dap/out/debugAdapter.js' },
   -- command = 'uae-dap',
-  options = { initialize_timeout_sec = 10 },
+  command = 'node',
+  args = { '--inspect', home .. '/projects/uae-dap/out/src/debugAdapter.js' },
+  options = { initialize_timeout_sec = 20 },
 }
 
 dap.configurations.asm68k = {
   {
     type = 'asm68k',
     request = 'launch',
-    program = '${workspaceFolder}/uae/dh0/gencop',
-    cwd = '${workspaceFolder}',
-    -- custom settings:
-    stopOnEntry = true,
+    program = '${workspaceFolder}/out/a.hunk-debug.exe',
+    remoteProgram = "SYS:a.exe",
+    -- program = function()
+    --   return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    -- end,
     trace = false,
-    emulator = home .. "/amiga/bin/fs-uae",
-    emulatorWorkingDir = home .."/amiga/bin",
-    emulatorOptions = {
-      "--hard_drive_0=${workspaceFolder}/uae/dh0",
-      "--remote_debugger=200",
-      "--use_remote_debugger=true",
-      "--automatic_input_grab=0",
-      "--warp_mode=1"
-    },
+    stopOnEntry = false,
+    emulatorArgs = { "--hard_drive_0=${workspaceFolder}/out", "--stdout" },
+    vasm = {
+      args = {
+        '-I' .. home .. '/amiga/ndk',
+        '-I' .. home .. '/amiga/libraries',
+      }
+    }
   }
 }
 
@@ -122,4 +122,14 @@ dap.configurations.cpp = {
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
 
-dap.set_log_level('DEBUG')
+-- dap.set_log_level('DEBUG')
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
