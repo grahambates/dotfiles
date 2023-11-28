@@ -1,9 +1,12 @@
+require("neodev").setup({
+  library = { plugins = { "nvim-dap-ui" }, types = true },
+})
+
 local lspconfig = require('lspconfig')
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 local servers = {
-  'tsserver',
   'intelephense',
   'gopls',
   'terraformls',
@@ -20,7 +23,7 @@ local servers = {
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- Disable default formatting for languages handled by null-ls
-  if client.name == "jsonls" or client.name == "html" or client.name == "cssls" or client.name == "tsserver" then
+  if client.name == "jsonls" or client.name == "html" or client.name == "cssls" or client.name == "typescript-tools" then
     client.server_capabilities.document_formatting = false
     client.server_capabilities.document_range_formatting = false
   end
@@ -31,8 +34,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Format on save
-  -- if client.resolved_capabilities.document_formatting then
-  if client.name == "tsserver" or  client.name == "m68k" then
+  if client.name == "typescript-tools" or  client.name == "m68k" then
     vim.cmd[[
       augroup lsp_document_format
         autocmd! * <buffer>
@@ -49,7 +51,7 @@ local on_attach = function(client, bufnr)
     },
     l = {
       name = "Language",
-      f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format", buffer = bufnr, noremap = true },
+      f = { "<cmd>lua vim.lsp.buf.format()<cr>", "Format", buffer = bufnr, noremap = true },
       d = { "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols", buffer = bufnr, noremap = true },
       s = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace symbols", buffer = bufnr, noremap = true },
       r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename", buffer = bufnr, noremap = true },
@@ -63,10 +65,13 @@ local on_attach = function(client, bufnr)
       },
       t = {
         name = "Typescript",
-        r = { "<cmd>TypescriptRenameFile<cr>", "Rename file", buffer = bufnr, noremap = true },
-        o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize imports", buffer = bufnr, noremap = true },
-        u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove unused", buffer = bufnr, noremap = true },
-        a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports", buffer = bufnr, noremap = true },
+        r = { "<cmd>TSToolsRenameFile<cr>", "Rename file", buffer = bufnr, noremap = true },
+        o = { "<cmd>TSToolsOrganizeImports<cr>", "Organize imports", buffer = bufnr, noremap = true },
+        s = { "<cmd>TSToolsSortImports<cr>", "Sort imports", buffer = bufnr, noremap = true },
+        u = { "<cmd>TSToolsRemoveUnused<cr>", "Remove unused", buffer = bufnr, noremap = true },
+        a = { "<cmd>TSToolsAddMissingImports<cr>", "Add missing imports", buffer = bufnr, noremap = true },
+        f = { "<cmd>TSToolsFixAll<cr>", "Fix all fixable errors", buffer = bufnr, noremap = true },
+        d = { "<cmd>TSToolsGoToSourceDefinition<cr>", "Goes to source definition", buffer = bufnr, noremap = true },
       },
     },
   }, { prefix = "<leader>" })
@@ -97,19 +102,21 @@ for _, lsp in pairs(servers) do
   }
 end
 
-local home = os.getenv('HOME')
-
 lspconfig.m68k.setup {
   -- cmd = { "m68k-lsp-server", "--stdio" },
   cmd = { "/Users/batesgw1/projects/m68k-lsp/server/cli.js", "--stdio" },
-  trace = 'verbose',
   init_options = {
     -- trace = 'verbose',
     includePaths = { '../include', '..' },
     format = {
-      case = {
-        instruction = 'lower'
+      align = {
+        mnemonic = 16,
+        operands = 24,
+        comment = 40,
       }
+    },
+    vasm = {
+      args = {"-nowarn=62"}
     }
   },
   on_attach = on_attach,
@@ -194,26 +201,19 @@ lspconfig.lua_ls.setup {
   },
 }
 
+require("typescript-tools").setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
 
--- vim.lsp.set_log_level("trace")
-
--- Stand-alone linters / formatters
 local null_ls = require("null-ls")
 null_ls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
   sources = {
-    -- null_ls.builtins.diagnostics.eslint_d,
-    -- null_ls.builtins.code_actions.eslint_d,
-    null_ls.builtins.diagnostics.eslint,
-    null_ls.builtins.code_actions.eslint,
-    -- null_ls.builtins.code_actions.eslint,
-    null_ls.builtins.formatting.prettierd
+    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.code_actions.eslint_d,
+    -- null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.eslint_d,
   },
-  on_attach = on_attach
-})
-
-require('typescript').setup({
-  disable_formatting = true,
-  server = {
-    on_attach = on_attach
-  }
 })

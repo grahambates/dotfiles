@@ -65,24 +65,16 @@ dap.adapters.asm68k = {
 
 dap.configurations.asm68k = {
   {
+   name = 'Default',
     type = 'asm68k',
     request = 'launch',
-    program = '${workspaceFolder}/out/a.hunk-debug.exe',
-    remoteProgram = "SYS:a.exe",
-    -- program = function()
-    --   return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    -- end,
-    trace = false,
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/uae/dh0/demo', 'file')
+    end,
     stopOnEntry = false,
-    emulatorArgs = { "--hard_drive_0=${workspaceFolder}/out", "--stdout" },
-    vasm = {
-      args = {
-        '-I' .. home .. '/amiga/ndk',
-        '-I' .. home .. '/amiga/libraries',
-      }
-    }
   }
 }
+dap.adapters["amiga-assembly"] = dap.adapters.asm68k
 
 dap.adapters.lldb = {
   type = 'executable',
@@ -133,3 +125,7 @@ end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
+
+require('dap.ext.vscode').load_launchjs(nil, {
+  ["amiga-assembly"] = {'asm68k'}
+})

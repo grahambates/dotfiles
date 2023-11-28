@@ -152,10 +152,14 @@ require("which-key").register({
     }
   },
 
+  h = {
+    name = "Gitsigns"
+  },
+
   -- Trouble
   t = {
     name = "Trouble",
-    t = { "<cmd>Trouble<cr>", "Open" },
+    t = { "<cmd>TroubleToggle<cr>", "Toggle" },
     w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace" },
     d = { "<cmd>Trouble document_diagnostics<cr>", "Document" },
     l = { "<cmd>Trouble loclist<cr>", "Location list" },
