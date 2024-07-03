@@ -16,8 +16,11 @@ local servers = {
   'html',
   'cssls',
   'dockerls',
+  'kotlin',
   -- 'm68k',
 }
+
+-- vim.lsp.set_log_level("info")
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -204,6 +207,11 @@ lspconfig.lua_ls.setup {
 require("typescript-tools").setup {
   on_attach = on_attach,
   capabilities = capabilities,
+  settings = {
+    tsserver_file_preferences = {
+      disableSuggestions = true,
+    },
+  },
 }
 
 local null_ls = require("null-ls")

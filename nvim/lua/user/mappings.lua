@@ -103,7 +103,6 @@ require("which-key").register({
     W = { '<cmd>wall<cr>', "Write all" },
     s = { '<cmd>saveas', "Save as..." },
     q = { '<cmd>bdelete<cr>', "Close" },
-    a = { '<cmd>ball<cr>', "Show all" },
     ["?"] = { '<cmd>ls<cr>', "List" },
     f = { '<cmd>bfirst<cr>', "First" },
     l = { '<cmd>blast<cr>', "Last" },
@@ -193,6 +192,7 @@ require("which-key").register({
   j = { 'J"_x', "Join" },
   ["?"] = { '<cmd>set spell!<cr>', "Spelling toggle" },
   m = { '<cmd>Make<cr>', "Make" },
+  r = { '<cmd>Make run<cr>', "Make run" },
 
   d = {
     name = "Debug",

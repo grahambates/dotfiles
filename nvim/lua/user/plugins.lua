@@ -16,14 +16,13 @@ return packer.startup(function()
   use 'folke/tokyonight.nvim'
   use "rebelot/kanagawa.nvim"
 
-  use 'editorconfig/editorconfig-vim'
+  -- use 'editorconfig/editorconfig-vim'
   use 'junegunn/vim-easy-align' -- Align characters with ga
   use 'junegunn/vim-peekaboo'   -- Register preview
   use 'justinmk/vim-dirvish'    -- Nicer file navigator
   use 'machakann/vim-highlightedyank'
   use 'mbbill/undotree'
   use 'nelstrom/vim-visual-star-search'
-  -- use 'tpope/vim-commentary'
   use {
     'numToStr/Comment.nvim',
     config = function()
@@ -33,7 +32,6 @@ return packer.startup(function()
   use 'tpope/vim-eunuch' -- Vim sugar for the UNIX shell commands e.g. Rename, Delete
   use 'tpope/vim-fugitive'
   use 'tpope/vim-repeat'
-  -- use 'tpope/vim-surround'
   use({
     "kylechui/nvim-surround",
     tag = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -91,27 +89,17 @@ return packer.startup(function()
               td = { gs.toggle_deleted, "Toggle deleted", buffer = bufnr, noremap = true },
             },
           })
-
-          --           -- Actions
-          --           map('n', '<leader>hs', gs.stage_hunk)
-          --           map('n', '<leader>hr', gs.reset_hunk)
-          --           map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end)
-          --           map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end)
-          --           map('n', '<leader>hS', gs.stage_buffer)
-          --           map('n', '<leader>hu', gs.undo_stage_hunk)
-          --           map('n', '<leader>hR', gs.reset_buffer)
-          --           map('n', '<leader>hp', gs.preview_hunk)
-          --           map('n', '<leader>hb', function() gs.blame_line { full = true } end)
-          --           map('n', '<leader>tb', gs.toggle_current_line_blame)
-          --           map('n', '<leader>hd', gs.diffthis)
-          --           map('n', '<leader>hD', function() gs.diffthis('~') end)
-          --           map('n', '<leader>td', gs.toggle_deleted)
-
           -- Text object
           map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
         end
 
       })
+    end
+  }
+  use {
+    "klen/nvim-config-local",
+    config = function()
+      require('config-local').setup()
     end
   }
 
@@ -228,7 +216,8 @@ return packer.startup(function()
   }
 
   -- Color code nested punctuation pairs
-  use 'p00f/nvim-ts-rainbow'
+  -- use 'p00f/nvim-ts-rainbow'
+  use 'HiPhish/rainbow-delimiters.nvim'
 
   -- Debug adapter protocol
   use {

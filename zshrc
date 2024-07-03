@@ -6,12 +6,16 @@ export PATH="/Users/batesgw1/.cargo/bin:$PATH"
 export PATH="/Users/batesgw1/homebrew/bin:$PATH"
 export PATH="/Users/batesgw1/Library/Android/sdk/platform-tools:$PATH"
 # export PATH="/Users/batesgw1/amiga/bin:$PATH"
-export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin:$PATH"
-export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin/opt/bin:$PATH"
+# export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin:$PATH"
+# export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin/opt/bin:$PATH"
+#
+
+# export TERM=vt100
+eval $(thefuck --alias)
 
 
-export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
-export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+# export C_INCLUDE_PATH=/Users/batesgw1/homebrew/include
+# export CPLUS_INCLUDE_PATH=/Users/batesgw1/homebrew/include
 
 # Aspera client
 export PATH=/Users/batesgw1/Applications/Aspera\ CLI/bin:$PATH
@@ -150,7 +154,7 @@ export FZF_DEFAULT_OPTS="--preview '[[ \$(file --mime {}) =~ binary ]] && echo {
  (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -500'"
 export FZF_DEFAULT_COMMAND='rg --files --follow'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+# export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 export BAT_THEME="TwoDark"
 
 # Autojump
@@ -174,3 +178,4 @@ export NVM_DIR="$HOME/.nvm"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
