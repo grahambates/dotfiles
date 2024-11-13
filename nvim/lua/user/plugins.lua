@@ -11,10 +11,29 @@ packer = require 'packer'
 return packer.startup(function()
   use 'wbthomason/packer.nvim'
 
+  -- use {
+  --   'goolord/alpha-nvim',
+  --   requires = { 'nvim-tree/nvim-web-devicons' },
+  --   config = function ()
+  --     local alpha = require("alpha")
+  --     local dashboard = require("alpha.themes.dashboard")
+  --     dashboard.section.header.val = {
+  --         "    ___   ____ ____    __    ____   ____",
+  --         "____\\  \\_/_  //   /___.\\_)._/_  /_./_  /____",
+  --         "\\    _  | '_/ \\___    |   | _/    | '_/    /",
+  --         " \\   \\  |  \\   | /    |   | \\     |  \\    /",
+  --         " /______|______|______|___|__\\____|_______\\",
+  --         "+-diP----------------------------------aSL-+",
+  --     }
+  --     alpha.setup(dashboard.opts)
+  --   end
+  -- }
+
   -- Color themes
   use 'Mofiqul/dracula.nvim'
   use 'folke/tokyonight.nvim'
   use "rebelot/kanagawa.nvim"
+  use { "catppuccin/nvim", as = "catppuccin" }
 
   -- use 'editorconfig/editorconfig-vim'
   use 'junegunn/vim-easy-align' -- Align characters with ga
@@ -74,20 +93,19 @@ return packer.startup(function()
             return '<Ignore>'
           end, { expr = true })
 
-          require("which-key").register({
-            h = {
-              s = { gs.stage_hunk, "Stage hunk", buffer = bufnr, noremap = true },
-              r = { gs.reset_hunk, "Reset hunk", buffer = bufnr, noremap = true },
-              S = { gs.stage_buffer, "Stage buffer", buffer = bufnr, noremap = true },
-              u = { gs.undo_stage_hunk, "Undo stage hunk", buffer = bufnr, noremap = true },
-              R = { gs.reset_buffer, "Reset buffer", buffer = bufnr, noremap = true },
-              p = { gs.preview_hunk, "Preview hunk", buffer = bufnr, noremap = true },
-              B = { function() gs.blame_line { full = true } end, "Blame line full", buffer = bufnr, noremap = true },
-              b = { gs.toggle_current_line_blame, "Toggle current line blame", buffer = bufnr, noremap = true },
-              d = { gs.diffthis, "Diff this", buffer = bufnr, noremap = true },
-              D = { function() gs.diffthis('~') end, "Diff this ~", buffer = bufnr, noremap = true },
-              td = { gs.toggle_deleted, "Toggle deleted", buffer = bufnr, noremap = true },
-            },
+
+          require("which-key").add({
+            { "hB", function() gs.blame_line { full = true } end, buffer = bufnr, desc = "Blame line full", remap = false },
+            { "hD", function() gs.diffthis('~') end, buffer = bufnr, desc = "Diff this ~", remap = false },
+            { "hR", gs.reset_buffer, buffer = bufnr, desc = "Reset buffer", remap = false },
+            { "hS", gs.stage_buffer, buffer = bufnr, desc = "Stage buffer", remap = false },
+            { "hb", gs.toggle_current_line_blame, buffer = bufnr, desc = "Toggle current line blame", remap = false },
+            { "hd", gs.diffthis, buffer = bufnr, desc = "Diff this", remap = false },
+            { "hp", gs.preview_hunk, buffer = bufnr, desc = "Preview hunk", remap = false },
+            { "hr", gs.reset_hunk, buffer = bufnr, desc = "Reset hunk", remap = false },
+            { "hs", gs.stage_hunk, buffer = bufnr, desc = "Stage hunk", remap = false },
+            { "htd", gs.toggle_deleted, buffer = bufnr, desc = "Toggle deleted", remap = false },
+            { "hu", gs.undo_stage_hunk, buffer = bufnr, desc = "Undo stage hunk", remap = false },
           })
           -- Text object
           map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
@@ -118,6 +136,7 @@ return packer.startup(function()
     'nvimtools/none-ls.nvim',
     requires = { { 'nvim-lua/plenary.nvim' } },
   }
+  use 'nvimtools/none-ls-extras.nvim'
 
   use {
     "pmizio/typescript-tools.nvim",
@@ -222,7 +241,9 @@ return packer.startup(function()
   -- Debug adapter protocol
   use {
     "rcarriga/nvim-dap-ui",
-    requires = { "mfussenegger/nvim-dap" },
+    requires = {
+	    "mfussenegger/nvim-dap",
+	    "nvim-neotest/nvim-nio"},
     config = function()
       require("dapui").setup()
     end

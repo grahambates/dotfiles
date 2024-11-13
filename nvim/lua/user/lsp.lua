@@ -16,7 +16,7 @@ local servers = {
   'html',
   'cssls',
   'dockerls',
-  'kotlin',
+  -- 'kotlin',
   -- 'm68k',
 }
 
@@ -46,38 +46,30 @@ local on_attach = function(client, bufnr)
     ]]
   end
 
-  require("which-key").register({
-    ["'"] = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace symbols", buffer = bufnr, noremap = true },
-    f = {
-      d = { "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols", buffer = bufnr, noremap = true },
-      s = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace symbols", buffer = bufnr, noremap = true },
-    },
-    l = {
-      name = "Language",
-      f = { "<cmd>lua vim.lsp.buf.format()<cr>", "Format", buffer = bufnr, noremap = true },
-      d = { "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols", buffer = bufnr, noremap = true },
-      s = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace symbols", buffer = bufnr, noremap = true },
-      r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename", buffer = bufnr, noremap = true },
-      a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code action", buffer = bufnr, noremap = true },
-      o = { "<cmd>SymbolsOutline<cr>", "Outline", buffer = bufnr, noremap = true },
-      w = {
-        name = "Workspace",
-        a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", "Add folder", buffer = bufnr, noremap = true },
-        r = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", "Remove folder", buffer = bufnr, noremap = true },
-        l = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", "List folders", buffer = bufnr, noremap = true },
-      },
-      t = {
-        name = "Typescript",
-        r = { "<cmd>TSToolsRenameFile<cr>", "Rename file", buffer = bufnr, noremap = true },
-        o = { "<cmd>TSToolsOrganizeImports<cr>", "Organize imports", buffer = bufnr, noremap = true },
-        s = { "<cmd>TSToolsSortImports<cr>", "Sort imports", buffer = bufnr, noremap = true },
-        u = { "<cmd>TSToolsRemoveUnused<cr>", "Remove unused", buffer = bufnr, noremap = true },
-        a = { "<cmd>TSToolsAddMissingImports<cr>", "Add missing imports", buffer = bufnr, noremap = true },
-        f = { "<cmd>TSToolsFixAll<cr>", "Fix all fixable errors", buffer = bufnr, noremap = true },
-        d = { "<cmd>TSToolsGoToSourceDefinition<cr>", "Goes to source definition", buffer = bufnr, noremap = true },
-      },
-    },
-  }, { prefix = "<leader>" })
+  require("which-key").add({
+    { "<leader>'", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
+    { "<leader>fd", "<cmd>Telescope lsp_document_symbols<cr>", buffer = 1, desc = "Document symbols", remap = false },
+    { "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
+    { "<leader>l", group = "Language" },
+    { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", buffer = 1, desc = "Code action", remap = false },
+    { "<leader>ld", "<cmd>Telescope lsp_document_symbols<cr>", buffer = 1, desc = "Document symbols", remap = false },
+    { "<leader>lf", "<cmd>lua vim.lsp.buf.format()<cr>", buffer = 1, desc = "Format", remap = false },
+    { "<leader>lo", "<cmd>SymbolsOutline<cr>", buffer = 1, desc = "Outline", remap = false },
+    { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", buffer = 1, desc = "Rename", remap = false },
+    { "<leader>ls", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
+    { "<leader>lt", group = "Typescript" },
+    { "<leader>lta", "<cmd>TSToolsAddMissingImports<cr>", buffer = 1, desc = "Add missing imports", remap = false },
+    { "<leader>ltd", "<cmd>TSToolsGoToSourceDefinition<cr>", buffer = 1, desc = "Goes to source definition", remap = false },
+    { "<leader>ltf", "<cmd>TSToolsFixAll<cr>", buffer = 1, desc = "Fix all fixable errors", remap = false },
+    { "<leader>lto", "<cmd>TSToolsOrganizeImports<cr>", buffer = 1, desc = "Organize imports", remap = false },
+    { "<leader>ltr", "<cmd>TSToolsRenameFile<cr>", buffer = 1, desc = "Rename file", remap = false },
+    { "<leader>lts", "<cmd>TSToolsSortImports<cr>", buffer = 1, desc = "Sort imports", remap = false },
+    { "<leader>ltu", "<cmd>TSToolsRemoveUnused<cr>", buffer = 1, desc = "Remove unused", remap = false },
+    { "<leader>lw", group = "Workspace" },
+    { "<leader>lwa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", buffer = 1, desc = "Add folder", remap = false },
+    { "<leader>lwl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", buffer = 1, desc = "List folders", remap = false },
+    { "<leader>lwr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", buffer = 1, desc = "Remove folder", remap = false },
+  })
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -219,9 +211,31 @@ null_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   sources = {
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.code_actions.eslint_d,
     -- null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.formatting.eslint_d,
+    require("none-ls.diagnostics.eslint_d"),
+    require("none-ls.code_actions.eslint_d"),
+    require("none-ls.formatting.eslint_d"),
   },
+})
+
+lspconfig.rust_analyzer.setup({
+    on_attach = on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            imports = {
+                granularity = {
+                    group = "module",
+                },
+                prefix = "self",
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+        }
+    }
 })
