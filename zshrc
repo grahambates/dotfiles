@@ -12,7 +12,7 @@ export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 export PATH="/Users/batesgw1/.cargo/bin:$PATH"
 export PATH="/Users/batesgw1/homebrew/bin:$PATH"
 export PATH="/Users/batesgw1/Library/Android/sdk/platform-tools:$PATH"
-# export PATH="/Users/batesgw1/amiga/bin:$PATH"
+# export PATH="/Users/batesgw1/amiga/bin:/Users/batesgw1/amiga/bin/bartman:/Users/batesgw1/amiga/bin/bartman/opt/bin/:$PATH"
 # export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin:$PATH"
 # export PATH="/Users/batesgw1/projects/vscode-amiga-debug/bin/darwin/opt/bin:$PATH"
 #
@@ -98,10 +98,11 @@ HIST_STAMPS="dd.mm.yyyy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  aws
+  brew
   common-aliases
   docker
   docker-compose
-  dotenv
   golang
   history-substring-search
   npm
@@ -194,3 +195,5 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # Created by `pipx` on 2024-08-07 23:12:51
 export PATH="$PATH:/Users/BatesGW1/.local/bin"
+export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
+export PATH="/opt/homebrew/opt/binutils/bin:$PATH"

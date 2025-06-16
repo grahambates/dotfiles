@@ -34,6 +34,10 @@ return packer.startup(function()
   use 'folke/tokyonight.nvim'
   use "rebelot/kanagawa.nvim"
   use { "catppuccin/nvim", as = "catppuccin" }
+  use 'sho-87/kanagawa-paper.nvim'
+  use '0xstepit/flow.nvim'
+  use 'olimorris/onedarkpro.nvim'
+  use 'tiagovla/tokyodark.nvim'
 
   -- use 'editorconfig/editorconfig-vim'
   use 'junegunn/vim-easy-align' -- Align characters with ga
@@ -145,6 +149,19 @@ return packer.startup(function()
 
   use 'ray-x/lsp_signature.nvim'
   use 'simrat39/symbols-outline.nvim'
+  
+  use {
+    'mason-org/mason.nvim',
+    config = function()
+      require('mason').setup()
+    end
+  }
+  use {
+    'mason-org/mason-lspconfig.nvim',
+    config = function()
+      require("mason-lspconfig").setup()
+    end
+  }
 
   -- Tree Sitter
   use 'nvim-treesitter/nvim-treesitter'
@@ -167,10 +184,17 @@ return packer.startup(function()
     'nvim-lualine/lualine.nvim',
     config = function()
       require('lualine').setup {
-        options = {
-          -- theme = 'dracula-nvim'
-          theme = 'tokyonight'
-        }
+        sections = {
+          lualine_c = {
+            'filename',
+            {'aerial', exact = false},
+          }
+        },
+        -- options = {
+        --   -- theme = 'dracula-nvim'
+        --   -- theme = 'tokyonight'
+        --   theme = 'gruvbox_dark'
+        -- }
       }
     end
   }
@@ -256,6 +280,25 @@ return packer.startup(function()
       require("68kcounter").setup({
         -- path to 68kcounter node cli tool (default assumes global path)
         bin_path = "68kcounter"
+      })
+    end,
+  })
+
+  use({
+    "stevearc/aerial.nvim",
+    config = function()
+      require("aerial").setup({
+        filter_kind = false
+        -- filter_kind = {
+        --   "Class",
+        --   "Constructor",
+        --   "Enum",
+        --   "Function",
+        --   "Interface",
+        --   "Module",
+        --   "Method",
+        --   "Struct",
+        -- },
       })
     end,
   })

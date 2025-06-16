@@ -2,25 +2,11 @@ require("neodev").setup({
   library = { plugins = { "nvim-dap-ui" }, types = true },
 })
 
-local lspconfig = require('lspconfig')
+-- Initialise icons for LSP completions
+require('lspkind').init({
+  mode = 'symbol_text',
+})
 
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = {
-  'intelephense',
-  'gopls',
-  'terraformls',
-  'pyright',
-  'clangd',
-  'jsonls',
-  'html',
-  'cssls',
-  'dockerls',
-  -- 'kotlin',
-  -- 'm68k',
-}
-
--- vim.lsp.set_log_level("info")
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -46,31 +32,6 @@ local on_attach = function(client, bufnr)
     ]]
   end
 
-  require("which-key").add({
-    { "<leader>'", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
-    { "<leader>fd", "<cmd>Telescope lsp_document_symbols<cr>", buffer = 1, desc = "Document symbols", remap = false },
-    { "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
-    { "<leader>l", group = "Language" },
-    { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", buffer = 1, desc = "Code action", remap = false },
-    { "<leader>ld", "<cmd>Telescope lsp_document_symbols<cr>", buffer = 1, desc = "Document symbols", remap = false },
-    { "<leader>lf", "<cmd>lua vim.lsp.buf.format()<cr>", buffer = 1, desc = "Format", remap = false },
-    { "<leader>lo", "<cmd>SymbolsOutline<cr>", buffer = 1, desc = "Outline", remap = false },
-    { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", buffer = 1, desc = "Rename", remap = false },
-    { "<leader>ls", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
-    { "<leader>lt", group = "Typescript" },
-    { "<leader>lta", "<cmd>TSToolsAddMissingImports<cr>", buffer = 1, desc = "Add missing imports", remap = false },
-    { "<leader>ltd", "<cmd>TSToolsGoToSourceDefinition<cr>", buffer = 1, desc = "Goes to source definition", remap = false },
-    { "<leader>ltf", "<cmd>TSToolsFixAll<cr>", buffer = 1, desc = "Fix all fixable errors", remap = false },
-    { "<leader>lto", "<cmd>TSToolsOrganizeImports<cr>", buffer = 1, desc = "Organize imports", remap = false },
-    { "<leader>ltr", "<cmd>TSToolsRenameFile<cr>", buffer = 1, desc = "Rename file", remap = false },
-    { "<leader>lts", "<cmd>TSToolsSortImports<cr>", buffer = 1, desc = "Sort imports", remap = false },
-    { "<leader>ltu", "<cmd>TSToolsRemoveUnused<cr>", buffer = 1, desc = "Remove unused", remap = false },
-    { "<leader>lw", group = "Workspace" },
-    { "<leader>lwa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>", buffer = 1, desc = "Add folder", remap = false },
-    { "<leader>lwl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>", buffer = 1, desc = "List folders", remap = false },
-    { "<leader>lwr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>", buffer = 1, desc = "Remove folder", remap = false },
-  })
-
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>Trouble lsp_references<cr>', opts)
@@ -85,17 +46,13 @@ end
 -- Update capabilities for cmp
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
--- Initialise icons for LSP completions
-require('lspkind').init({
-  mode = 'symbol_text',
+vim.lsp.config("*", {
+  capabilities = capabilities,
+  on_attach = on_attach,
 })
 
-for _, lsp in pairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
-end
+-- vim.lsp.set_log_level("info")
+local lspconfig = require('lspconfig')
 
 lspconfig.m68k.setup {
   -- cmd = { "m68k-lsp-server", "--stdio" },
@@ -118,84 +75,6 @@ lspconfig.m68k.setup {
   capabilities = capabilities,
 }
 
-lspconfig.lua_ls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        disable = {
-          'lowercase-global'
-        },
-        globals = {
-          'vim',
-          'use',
-          'require',
-          -- TIC-80
-          'btn',
-          'btnp',
-          'circ',
-          'circb',
-          'clip',
-          'cls',
-          'elli',
-          'ellib',
-          'exit',
-          'fget',
-          'font',
-          'fset',
-          'key',
-          'keyp',
-          'line',
-          'map',
-          'memcpy',
-          'memset',
-          'mget',
-          'mouse',
-          'mset',
-          'music',
-          'peek',
-          'peek1',
-          'peek2',
-          'peek4',
-          'pix',
-          'pmem',
-          'poke',
-          'poke1',
-          'poke2',
-          'poke4',
-          'print',
-          'rect',
-          'rectb',
-          'reset',
-          'sfx',
-          'spr',
-          'sync',
-          'time',
-          'trace',
-          'tri',
-          'trib',
-          'ttri',
-          'vbank'
-        },
-      },
-      workspace = {
-        checkThirdParty = false,
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
-
 require("typescript-tools").setup {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -206,36 +85,18 @@ require("typescript-tools").setup {
   },
 }
 
-local null_ls = require("null-ls")
-null_ls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  sources = {
-    -- null_ls.builtins.formatting.prettierd,
-    require("none-ls.diagnostics.eslint_d"),
-    require("none-ls.code_actions.eslint_d"),
-    require("none-ls.formatting.eslint_d"),
-  },
-})
-
-lspconfig.rust_analyzer.setup({
-    on_attach = on_attach,
-    settings = {
-        ["rust-analyzer"] = {
-            imports = {
-                granularity = {
-                    group = "module",
-                },
-                prefix = "self",
-            },
-            cargo = {
-                buildScripts = {
-                    enable = true,
-                },
-            },
-            procMacro = {
-                enable = true
-            },
-        }
-    }
-})
+-- local null_ls = require("null-ls")
+-- null_ls.setup({
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   sources = {
+--     null_ls.builtins.formatting.prettier,
+--     -- null_ls.builtins.formatting.prettier_d_slim,
+--     require("none-ls.diagnostics.eslint_d"),
+--     require("none-ls.code_actions.eslint_d"),
+--     -- require("none-ls.formatting.eslint_d"),
+--     -- require("none-ls.diagnostics.eslint"),
+--     -- require("none-ls.code_actions.eslint"),
+--     -- require("none-ls.formatting.eslint"),
+--   },
+-- })

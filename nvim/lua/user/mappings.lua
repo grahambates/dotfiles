@@ -10,7 +10,7 @@ opts = { noremap = true, silent = true }
 -- Better window navigation
 map("n", "<C-h>", "<C-w>h", opts)
 map("n", "<C-j>", "<C-w>j", opts)
-map("n", "<C-k>", "<C-w>k", opts) 
+map("n", "<C-k>", "<C-w>k", opts)
 map("n", "<C-l>", "<C-w>l", opts)
 
 map("i", "<C-h>", "<C-w>h", opts)
@@ -101,6 +101,9 @@ require("which-key").add({
   { "<leader>Q", "<cmd>q<cr>", desc = "Quit" },
   { "<leader>\\", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
 
+  { "<leader>[", "<cmd>AerialPrev<cr>", desc = "Previous symbol" },
+  { "<leader>]", "<cmd>AerialNext<cr>", desc = "Next symbol" },
+
   { "<leader>b", group = "Buffer" },
   { "<leader>b?", "<cmd>ls<cr>", desc = "List" },
   { "<leader>bT", "<cmd>vsp|term<cr>", desc = "Terminal vertical split" },
@@ -157,7 +160,10 @@ require("which-key").add({
   { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help" },
   { "<leader>fo", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
   { "<leader>fr", "<cmd>Telescope registers<cr>", desc = "Registers" },
-  { "<leader>fs", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
+
+  { "<leader>'", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
+  { "<leader>fd", "<cmd>Telescope lsp_document_symbols<cr>", buffer = 1, desc = "Document symbols", remap = false },
+  { "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", buffer = 1, desc = "Workspace symbols", remap = false },
 
   { "<leader>g", group = "Git" },
   { "<leader>gb", "<cmd>Git blame<cr>", desc = "Blame" },
@@ -185,6 +191,27 @@ require("which-key").add({
   { "<leader>q", "<cmd>bd<cr>", desc = "Close buffer" },
   { "<leader>r", "<cmd>Make run<cr>", desc = "Make run" },
 
+  { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>",  desc = "Code action", remap = false },
+  { "<leader>ld", "<cmd>Telescope lsp_document_symbols<cr>",  desc = "Document symbols", remap = false },
+  { "<leader>lf", "<cmd>lua vim.lsp.buf.format()<cr>",  desc = "Format", remap = false },
+  { "<leader>lo", "<cmd>SymbolsOutline<cr>",  desc = "Outline", remap = false },
+  { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>",  desc = "Rename", remap = false },
+  { "<leader>ls", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",  desc = "Workspace symbols", remap = false },
+
+  { "<leader>lt", group = "Typescript" },
+  { "<leader>lta", "<cmd>TSToolsAddMissingImports<cr>",  desc = "Add missing imports", remap = false },
+  { "<leader>ltd", "<cmd>TSToolsGoToSourceDefinition<cr>",  desc = "Goes to source definition", remap = false },
+  { "<leader>ltf", "<cmd>TSToolsFixAll<cr>",  desc = "Fix all fixable errors", remap = false },
+  { "<leader>lto", "<cmd>TSToolsOrganizeImports<cr>",  desc = "Organize imports", remap = false },
+  { "<leader>ltr", "<cmd>TSToolsRenameFile<cr>",  desc = "Rename file", remap = false },
+  { "<leader>lts", "<cmd>TSToolsSortImports<cr>",  desc = "Sort imports", remap = false },
+  { "<leader>ltu", "<cmd>TSToolsRemoveUnused<cr>",  desc = "Remove unused", remap = false },
+
+  { "<leader>lw", group = "Workspace" },
+  { "<leader>lwa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<cr>",  desc = "Add folder", remap = false },
+  { "<leader>lwl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<cr>",  desc = "List folders", remap = false },
+  { "<leader>lwr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<cr>",  desc = "Remove folder", remap = false },
+
   { "<leader>t", group = "Trouble" },
   { "<leader>tt", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics" },
   { "<leader>tl", "<cmd>Trouble loclist<cr>", desc = "Location list" },
@@ -192,4 +219,6 @@ require("which-key").add({
 
   { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undotree" },
   { "<leader>w", "<cmd>w<cr>", desc = "Write buffer" },
+
+  { "<leader>a", "<cmd>AerialToggle!<CR>", desc = "Toggle Aerial" },
 })
