@@ -197,3 +197,7 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$PATH:/Users/BatesGW1/.local/bin"
 export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
 export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
