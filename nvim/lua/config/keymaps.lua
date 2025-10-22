@@ -7,8 +7,8 @@ local opts = { noremap = true, silent = true }
 
 -- map("n", "H", "^", opts)
 
-map("n", "<leader>m", "<cmd>Make<cr>", { desc = "Make" })
-map("n", "<leader>r", "<cmd>Make run<cr>", { desc = "Make run" })
+map("n", "<leader>m", "<cmd>make<cr>", { desc = "Make" })
+map("n", "<leader>r", "<cmd>write<cr><cmd>make run<cr>", { desc = "Make run" })
 map("n", "<leader>p", "<cmd>put<cr>", { desc = "Put" })
 
 map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
